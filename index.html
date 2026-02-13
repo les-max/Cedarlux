@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
   
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; background: #fafafa; }
     h1, h2, h3, h4, .serif { font-family: 'Playfair Display', serif; }
     .glass {
       background: rgba(255, 255, 255, 0.7);
@@ -23,37 +23,41 @@
     .bg-luxury-gold { background-color: #c5a059; }
     .scrollbar-hide::-webkit-scrollbar { display: none; }
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
-    }
-    .animate-shake { animation: shake 0.2s ease-in-out 0s 2; }
     
-    #root:empty {
+    #root { min-height: 100vh; }
+    
+    /* Loading state visible only when root is empty */
+    #root:empty::before {
+      content: 'Preparing your luxury experience...';
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      background: #fafafa;
+      height: 100vh;
+      width: 100%;
+      color: #c5a059;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.2rem;
     }
   </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.2.4",
-    "react/": "https://esm.sh/react@^19.2.4/",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "vite": "https://esm.sh/vite@^7.3.1",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
     "lucide-react": "https://esm.sh/lucide-react@^0.564.0",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4",
-    "@google/genai": "https://esm.sh/@google/genai@^1.41.0"
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4"
   }
 }
 </script>
 </head>
 <body class="bg-neutral-50 text-neutral-900 overflow-x-hidden">
   <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
+  <!-- Use relative path for Vite entry point -->
+  <script type="module" src="./index.tsx"></script>
 </body>
 </html>
