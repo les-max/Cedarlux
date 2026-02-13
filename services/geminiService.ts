@@ -1,11 +1,24 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
-// Updated history type to use array instead of tuple for parts to resolve TypeScript mismatch
-export const getDesignAdvice = async (userPrompt: string, history: { role: 'user' | 'model', parts: { text: string }[] }[]) => {
+const getApiKey = () => {
   try {
+    return (window as any).process?.env?.API_KEY || "";
+  } catch (e) {
+    return "";
+  }
+};
+
+export const getDesignAdvice = async (userPrompt: string, history: { role: 'user' | 'model', parts: { text: string }[] }[]) => {
+  const apiKey = getApiKey();
+  
+  if (!apiKey || apiKey === "") {
+    console.warn("Gemini API key not found. AI features disabled.");
+    return "I'm currently in browsing mode. To activate my design AI, please ensure an API key is provided in the project settings.";
+  }
+
+  try {
+    const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: [
@@ -13,22 +26,17 @@ export const getDesignAdvice = async (userPrompt: string, history: { role: 'user
         { role: 'user', parts: [{ text: userPrompt }] }
       ],
       config: {
-        // Correctly move system-level instructions to systemInstruction property
-        systemInstruction: `You are a luxury home design consultant for Cedar Lux Properties, specializing in Cedar Creek Lake estates in East Texas. 
-          Your goal is to help wealthy clients from Dallas design their dream lake house. 
-          You should talk about architectural styles (Modern Farmhouse, Texas Transitional, Contemporary Lakefront), 
-          outdoor living features (infinity pools, boat houses, outdoor kitchens), and interior finishes (white oak, marble, oversized windows).
-          Be sophisticated, helpful, and professional. 
-          Respond briefly but elegantly. Use markdown for lists.`,
+        systemInstruction: `You are an elite architectural consultant for Cedar Lux Properties. 
+        Specialize in high-end lakefront designs on Cedar Creek Lake, TX. 
+        Focus on natural materials (Texas limestone, cedar, steel), luxury amenities (infinity pools, smart docks), 
+        and the specific lifestyle of wealthy Dallas-based owners.`,
         temperature: 0.7,
-        topK: 40,
-        topP: 0.95,
       }
     });
 
-    return response.text;
+    return response.text || "I'm currently taking in the lake view. Could you please rephrase your request?";
   } catch (error) {
-    console.error("Gemini API Error:", error);
-    return "I apologize, my creative circuits are momentarily resting by the lake. How else can I assist with your vision?";
+    console.error("Gemini Consultation Error:", error);
+    return "I'm having a brief connection issue with my design studio. Please try asking me again in a moment.";
   }
 };

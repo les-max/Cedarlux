@@ -1,8 +1,8 @@
 
-import { Property, SiteSettings } from './types';
+import { Property, SiteSettings } from './types.ts';
 
 export const DEFAULT_SETTINGS: SiteSettings = {
-  logoImage: 'logo.png',
+  logoImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=100&h=100', // Temporary logo placeholder
   heroImage: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2070',
   heroHeadline: 'Crafting Legacies on the Waterfront.',
   heroSubheadline: 'Bespoke architectural masterpieces designed for those who demand the pinnacle of Cedar Creek Lake living.',
@@ -84,8 +84,7 @@ export const INITIAL_PROPERTIES: Property[] = [
     gallery: [
       'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2070',
       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070',
-      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2090',
-      'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&q=80&w=2070'
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2090'
     ],
     status: 'Available',
     neighborhood: 'Enchanted Isle',
@@ -107,32 +106,5 @@ export const INITIAL_PROPERTIES: Property[] = [
     status: 'Under Construction',
     neighborhood: 'Pinnacle Golf Club',
     features: ['Outdoor Kitchen', 'Guest Casita', 'Boat Lift', 'Smart Home System']
-  },
-  {
-    id: '3',
-    title: 'Waterfront Modernist',
-    price: 4200000,
-    beds: 6,
-    baths: 7.5,
-    sqft: 7500,
-    description: 'The pinnacle of luxury in East Texas. This sprawling estate features marble throughout, a private theater, and a master suite that defines opulence.',
-    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2090',
-    gallery: [
-      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2090',
-      'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&q=80&w=2070'
-    ],
-    status: 'Sold',
-    neighborhood: 'Long Cove',
-    features: ['Home Theater', 'Elevator', 'Putting Green', 'Steam Room']
   }
-];
-
-export const CEDAR_CREEK_NEIGHBORHOODS = [
-  'Long Cove',
-  'Enchanted Isle',
-  'Pinnacle Golf Club',
-  'Star Harbor',
-  'Beacon Hill',
-  'Mabank Waterfront',
-  'Gun Barrel City Shoreline'
 ];

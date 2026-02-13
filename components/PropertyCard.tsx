@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Property } from '../types';
+import { Property } from '../types.ts';
 import { Bed, Bath, Move, MapPin } from 'lucide-react';
 
 interface PropertyCardProps {
