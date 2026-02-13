@@ -1,20 +1,12 @@
-
 import { GoogleGenAI } from "@google/genai";
 
-const getApiKey = () => {
-  try {
-    return (window as any).process?.env?.API_KEY || "";
-  } catch (e) {
-    return "";
-  }
-};
-
 export const getDesignAdvice = async (userPrompt: string, history: { role: 'user' | 'model', parts: { text: string }[] }[]) => {
-  const apiKey = getApiKey();
+  // Use the API key exclusively from the environment variable as per guidelines.
+  const apiKey = process.env.API_KEY;
   
-  if (!apiKey || apiKey === "") {
+  if (!apiKey) {
     console.warn("Gemini API key not found. AI features disabled.");
-    return "I'm currently in browsing mode. To activate my design AI, please ensure an API key is provided in the project settings.";
+    return "I'm currently in browsing mode. My design AI will be available once the system connection is fully initialized.";
   }
 
   try {
@@ -22,14 +14,11 @@ export const getDesignAdvice = async (userPrompt: string, history: { role: 'user
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: [
-        ...history.map(h => ({ role: h.role === 'user' ? 'user' : 'model', parts: h.parts })),
+        ...history.map(h => ({ role: h.role, parts: h.parts })),
         { role: 'user', parts: [{ text: userPrompt }] }
       ],
       config: {
-        systemInstruction: `You are an elite architectural consultant for Cedar Lux Properties. 
-        Specialize in high-end lakefront designs on Cedar Creek Lake, TX. 
-        Focus on natural materials (Texas limestone, cedar, steel), luxury amenities (infinity pools, smart docks), 
-        and the specific lifestyle of wealthy Dallas-based owners.`,
+        systemInstruction: "You are an elite architectural consultant for Cedar Lux Properties. Specialize in high-end lakefront designs on Cedar Creek Lake, TX. Focus on natural materials (Texas limestone, cedar, steel), luxury amenities (infinity pools, smart docks), and the specific lifestyle of wealthy Dallas-based owners.",
         temperature: 0.7,
       }
     });
