@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
-import { Property, SiteSettings } from './types.ts';
-import { INITIAL_PROPERTIES, DEFAULT_SETTINGS } from './constants.tsx';
-import { PropertyCard } from './components/PropertyCard.tsx';
-import { PropertyAdmin } from './components/PropertyAdmin.tsx';
-import { AIConsultant } from './components/AIConsultant.tsx';
-import { PropertyDetailsModal } from './components/PropertyDetailsModal.tsx';
+import { Property, SiteSettings } from './types';
+import { INITIAL_PROPERTIES, DEFAULT_SETTINGS } from './constants';
+import { PropertyCard } from './components/PropertyCard';
+import { PropertyAdmin } from './components/PropertyAdmin';
+import { AIConsultant } from './components/AIConsultant';
+import { PropertyDetailsModal } from './components/PropertyDetailsModal';
 import { 
   Menu, X, Map, Phone, Instagram, Facebook, LayoutDashboard, 
   Lock, ArrowRight, Quote, Filter, Search, ChevronLeft, 
@@ -239,7 +238,6 @@ const App: React.FC = () => {
               </p>
             </div>
           </section>
-          {/* Rest of the Lifestyle components... */}
         </main>
       )}
 
@@ -334,7 +332,9 @@ const App: React.FC = () => {
       )}
       <AIConsultant />
       <footer className="bg-white border-t border-neutral-100 py-24">
-        {/* Footer content... */}
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-neutral-400 text-sm">© {new Date().getFullYear()} {settings.companyName}. All Rights Reserved.</p>
+        </div>
       </footer>
     </div>
   );

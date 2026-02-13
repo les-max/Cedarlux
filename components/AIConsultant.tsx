@@ -1,6 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { getDesignAdvice } from '../services/geminiService.ts';
+import { getDesignAdvice } from '../services/geminiService';
 import { Send, Sparkles, User, Bot, X } from 'lucide-react';
 
 export const AIConsultant: React.FC = () => {
@@ -62,9 +61,19 @@ export const AIConsultant: React.FC = () => {
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="flex justify-start italic text-xs text-neutral-400">Consulting designs...</div>
+            )}
           </div>
           <div className="p-4 border-t bg-white flex gap-2">
-            <input type="text" className="flex-1 p-2 border rounded-full outline-none" value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSend()} />
+            <input 
+              type="text" 
+              className="flex-1 p-2 border rounded-full outline-none" 
+              placeholder="Ask about design trends..."
+              value={input} 
+              onChange={e => setInput(e.target.value)} 
+              onKeyDown={e => e.key === 'Enter' && handleSend()} 
+            />
             <button onClick={handleSend} className="p-2 bg-lake text-white rounded-full"><Send size={18}/></button>
           </div>
         </div>
