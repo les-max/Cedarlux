@@ -12,15 +12,29 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   lifestyleHeadline: 'Elevate Your Lakeside Living.',
   lifestyleSubheadline: 'Unrivaled access, proximity to Dallas, and turn-key luxury for the discerning homeowner.',
   lifestyleImage: 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&q=80&w=2070',
-  lifestyleQuote: "It's more than a home; it's a legacy of summer memories.",
+  lifestyleQuote: "It's more than a home; it's a legacy of summer memories for our grandchildren.",
   lifestyleQuoteAuthor: "The Thompson Family, Dallas TX",
   activities: [
     {
       id: '1',
       icon: 'Waves',
       title: 'Water Sports',
-      description: 'Experience deep water perfect for wakeboarding and private sailing excursions.',
-      highlights: ['Private Boat Slips', 'Sunset Cruising']
+      description: 'Experience deep water perfect for wakeboarding, surfing, and private sailing excursions.',
+      highlights: ['Private Boat Slips', 'Deep Water Access', 'Sunset Cruising']
+    },
+    {
+      id: '2',
+      icon: 'Flag',
+      title: 'Championship Golf',
+      description: 'The Pinnacle Club and Long Cove offer world-class fairways with breathtaking lake views.',
+      highlights: ['Pro-Shop Access', 'Member Tournaments', 'Putting Greens']
+    },
+    {
+      id: '3',
+      icon: 'Anchor',
+      title: 'Private Yachting',
+      description: 'Our custom docks are designed for high-performance craft and social entertainment.',
+      highlights: ['Double-Decker Docks', 'Hydro-Lifts', 'Outdoor Kitchens']
     }
   ],
   localSpots: [
@@ -28,9 +42,25 @@ export const DEFAULT_SETTINGS: SiteSettings = {
       id: '1',
       category: 'Dining',
       title: "Vetoni's Italian",
-      description: 'Authentic Italian cuisine in a refined setting.',
+      description: 'Authentic Italian cuisine in a refined, white-tablecloth setting perfect for anniversaries.',
       image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2070',
       isFeatured: true
+    },
+    {
+      id: '2',
+      category: 'Dining',
+      title: "The Pinnacle Club",
+      description: 'Exclusive member dining with panoramic views and seasonal Texas-inspired menus.',
+      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=2070',
+      isFeatured: true
+    },
+    {
+      id: '3',
+      category: 'Shopping',
+      title: "Main Street Mabank",
+      description: 'High-end boutiques, antiques, and artisan galleries for curated lake house decor.',
+      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=2070',
+      isFeatured: false
     }
   ],
   neighborhoods: ['Long Cove', 'Enchanted Isle', 'Pinnacle Club', 'Star Harbor', 'Beacon Hill'],
@@ -57,5 +87,19 @@ export const INITIAL_PROPERTIES: Property[] = [
     status: 'Available',
     neighborhood: 'Enchanted Isle',
     features: ['Wine Cellar', 'Infinity Pool', 'Private Beach']
+  },
+  {
+    id: '2',
+    title: 'Modern Limestone Retreat',
+    price: 2100000,
+    beds: 4,
+    baths: 4,
+    sqft: 4100,
+    description: 'Clean lines meet Texas charm. This custom-built residence features locally sourced limestone and industrial steel accents with private cove access.',
+    image: 'https://images.unsplash.com/photo-1600585154526-990dcea4db0d?auto=format&fit=crop&q=80&w=2070',
+    gallery: [],
+    status: 'Under Construction',
+    neighborhood: 'Long Cove',
+    features: ['Smart Home', 'Outdoor Firepit', 'Custom Bunk Room']
   }
 ];

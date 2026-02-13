@@ -6,10 +6,10 @@ import { PropertyAdmin } from './components/PropertyAdmin';
 import { AIConsultant } from './components/AIConsultant';
 import { PropertyDetailsModal } from './components/PropertyDetailsModal';
 import { 
-  Menu, X, Phone, Instagram, Facebook, LayoutDashboard, 
+  Menu, X, LayoutDashboard, 
   ArrowRight, Quote, Search, ChevronLeft, 
   Waves, Flag, Users, ShoppingBag, Utensils, Anchor, MapPin, 
-  Sun, Coffee, Star
+  Sun, Coffee, Star, Instagram, Facebook
 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -48,6 +48,11 @@ const App: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('creekside_settings', JSON.stringify(settings));
   }, [settings]);
+
+  // Scroll to top on view change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [view]);
 
   const addProperty = (newProperty: Property) => {
     setProperties(prev => [newProperty, ...prev]);
@@ -107,6 +112,19 @@ const App: React.FC = () => {
         </div>
       </nav>
 
+      {/* Mobile Menu Overlay */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-[60] bg-white flex flex-col p-12 pt-32 gap-8 md:hidden">
+          <button onClick={() => { setView('home'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left">Home</button>
+          <button onClick={() => { setView('listings'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left">The Collection</button>
+          <button onClick={() => { setView('lifestyle'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left">Lifestyle</button>
+          <button onClick={() => { setView('admin'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left text-luxury-gold">CMS Login</button>
+          <div className="mt-auto flex gap-6 text-neutral-400">
+            <Instagram size={24} /> <Facebook size={24} />
+          </div>
+        </div>
+      )}
+
       {view === 'home' && (
         <main className="flex-1">
           <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden">
@@ -132,7 +150,15 @@ const App: React.FC = () => {
 
           <section className="py-32 bg-white">
             <div className="max-w-7xl mx-auto px-6">
-              <h2 className="text-5xl md:text-6xl font-bold mb-16 italic serif">Featured Estates</h2>
+              <div className="flex justify-between items-end mb-16">
+                <div>
+                  <h2 className="text-5xl md:text-6xl font-bold italic serif">Featured Estates</h2>
+                  <p className="text-neutral-500 mt-4 max-w-xl">A selection of our most prestigious properties currently overlooking Cedar Creek Lake.</p>
+                </div>
+                <button onClick={() => setView('listings')} className="text-luxury-gold font-bold flex items-center gap-2 hover:gap-4 transition-all pb-2 border-b-2 border-luxury-gold">
+                  View Full Collection <ArrowRight size={18} />
+                </button>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 {properties.slice(0, 3).map(property => (
                   <PropertyCard 
@@ -144,21 +170,161 @@ const App: React.FC = () => {
               </div>
             </div>
           </section>
+
+          <section className="py-32 bg-lake text-white relative overflow-hidden">
+            <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-16">
+              <div className="flex-1">
+                <h2 className="text-5xl font-medium serif italic mb-8">{settings.lifestyleHeadline}</h2>
+                <p className="text-neutral-400 text-xl font-light mb-12 leading-relaxed">{settings.lifestyleSubheadline}</p>
+                <button onClick={() => setView('lifestyle')} className="px-10 py-4 border-2 border-luxury-gold text-luxury-gold font-bold rounded-full hover:bg-luxury-gold hover:text-white transition-all uppercase tracking-widest text-xs">
+                  Discover Lake Life
+                </button>
+              </div>
+              <div className="flex-1 relative">
+                 <img src={settings.lifestyleImage} className="rounded-3xl shadow-2xl h-[500px] w-full object-cover" alt="Lake Life" />
+                 <div className="absolute -bottom-8 -left-8 bg-luxury-gold p-8 rounded-2xl max-w-xs shadow-xl hidden lg:block">
+                    <Quote className="text-white/20 mb-4" size={32} />
+                    <p className="text-lg font-bold italic serif mb-4 leading-tight">"{settings.lifestyleQuote}"</p>
+                    <p className="text-xs uppercase tracking-widest font-black">— {settings.lifestyleQuoteAuthor}</p>
+                 </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      )}
+
+      {view === 'lifestyle' && (
+        <main className="flex-1">
+          {/* Hero */}
+          <section className="relative h-[80vh] flex items-center justify-center text-center overflow-hidden">
+            <div className="absolute inset-0">
+              <img src={settings.lifestyleHeroImage} className="w-full h-full object-cover brightness-[0.4]" alt="Lifestyle" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-neutral-50/10"></div>
+            </div>
+            <div className="relative z-10 text-white max-w-4xl px-6">
+              <span className="text-xs font-bold uppercase tracking-[0.5em] text-luxury-gold mb-6 block">The Experience</span>
+              <h1 className="text-5xl md:text-8xl font-medium serif italic mb-8">{settings.lifestyleHeroHeadline}</h1>
+              <p className="text-xl md:text-2xl text-neutral-300 font-light leading-relaxed">{settings.lifestyleHeroSubheadline}</p>
+            </div>
+          </section>
+          
+          {/* Activities Section */}
+          <section className="py-32 bg-white">
+             <div className="max-w-7xl mx-auto px-6">
+                <div className="text-center mb-20">
+                   <h2 className="text-4xl md:text-5xl font-bold serif italic mb-6 text-lake">Lakeside Luxury, Defined.</h2>
+                   <p className="text-neutral-500 max-w-2xl mx-auto">Cedar Creek Lake offers a lifestyle unmatched in Texas, blending absolute privacy with exhilarating recreation.</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                   {settings.activities.map(act => (
+                     <div key={act.id} className="p-8 bg-neutral-50 rounded-3xl text-center hover:shadow-lg transition-all border border-neutral-100 group">
+                        <div className="w-20 h-20 bg-luxury-gold/10 group-hover:bg-luxury-gold rounded-full flex items-center justify-center mx-auto mb-6 text-luxury-gold group-hover:text-white transition-all shadow-sm">
+                           {act.icon === 'Waves' ? <Waves size={32} /> : act.icon === 'Flag' ? <Flag size={32} /> : <Anchor size={32} />}
+                        </div>
+                        <h3 className="text-2xl font-bold serif mb-4">{act.title}</h3>
+                        <p className="text-neutral-500 mb-8 leading-relaxed">{act.description}</p>
+                        <div className="flex flex-wrap gap-2 justify-center mt-auto">
+                           {act.highlights.map((h, idx) => (
+                             <span key={idx} className="px-3 py-1 bg-white rounded-full text-[10px] font-black uppercase tracking-wider text-luxury-gold border border-neutral-200">{h}</span>
+                           ))}
+                        </div>
+                     </div>
+                   ))}
+                </div>
+             </div>
+          </section>
+
+          {/* Local Spots Curated Grid */}
+          <section className="py-32 bg-neutral-50">
+             <div className="max-w-7xl mx-auto px-6">
+                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                   <div className="max-w-2xl">
+                      <h2 className="text-4xl font-bold serif italic mb-4">Lakeside Curations</h2>
+                      <p className="text-neutral-500">From fine dining at the Pinnacle Club to boutique shopping in Mabank, we've curated the best of the lake region.</p>
+                   </div>
+                   <div className="hidden md:block">
+                      <div className="flex gap-4">
+                         <div className="flex items-center gap-2 text-luxury-gold font-bold text-xs uppercase tracking-widest">
+                            <Utensils size={14}/> Dining
+                         </div>
+                         <div className="flex items-center gap-2 text-neutral-400 font-bold text-xs uppercase tracking-widest">
+                            <ShoppingBag size={14}/> Shopping
+                         </div>
+                      </div>
+                   </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                   {settings.localSpots.map(spot => (
+                     <div key={spot.id} className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all border border-neutral-100 group">
+                        <div className="h-64 overflow-hidden relative">
+                           <img src={spot.image} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" alt={spot.title} />
+                           <div className="absolute top-6 left-6">
+                              <span className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-sm">
+                                 {spot.category}
+                              </span>
+                           </div>
+                        </div>
+                        <div className="p-8">
+                           <h3 className="text-2xl font-bold serif mb-3">{spot.title}</h3>
+                           <p className="text-neutral-500 text-sm leading-relaxed">{spot.description}</p>
+                        </div>
+                     </div>
+                   ))}
+                </div>
+             </div>
+          </section>
         </main>
       )}
 
       {view === 'listings' && (
         <main className="flex-1 pt-40 pb-32">
           <div className="max-w-7xl mx-auto px-6">
-            <h1 className="text-6xl font-medium serif italic mb-12">The Collection</h1>
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+               <div>
+                  <h1 className="text-6xl font-medium serif italic mb-6">The Collection</h1>
+                  <p className="text-neutral-500 max-w-2xl text-lg">Browse our currently available residences and upcoming projects on Cedar Creek Lake.</p>
+               </div>
+               <div className="flex flex-wrap gap-4">
+                  <div className="relative">
+                    <select 
+                      className="appearance-none bg-white border border-neutral-200 px-8 py-3 rounded-full font-bold text-sm outline-none cursor-pointer pr-12"
+                      value={filterNeighborhood}
+                      onChange={e => setFilterNeighborhood(e.target.value)}
+                    >
+                      {neighborhoodsList.map(n => <option key={n} value={n}>{n}</option>)}
+                    </select>
+                    <ChevronLeft className="-rotate-90 absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" size={16} />
+                  </div>
+                  <div className="relative">
+                    <select 
+                      className="appearance-none bg-white border border-neutral-200 px-8 py-3 rounded-full font-bold text-sm outline-none cursor-pointer pr-12"
+                      value={filterStatus}
+                      onChange={e => setFilterStatus(e.target.value)}
+                    >
+                      {statusesList.map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                    <ChevronLeft className="-rotate-90 absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" size={16} />
+                  </div>
+               </div>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {filteredProperties.map(property => (
-                <PropertyCard 
-                  key={property.id} 
-                  property={property} 
-                  onViewDetails={setSelectedProperty}
-                />
-              ))}
+              {filteredProperties.length > 0 ? (
+                filteredProperties.map(property => (
+                  <PropertyCard 
+                    key={property.id} 
+                    property={property} 
+                    onViewDetails={setSelectedProperty}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full py-40 text-center">
+                   <Search size={48} className="mx-auto text-neutral-200 mb-6" />
+                   <h3 className="text-2xl font-bold serif italic">No properties found</h3>
+                   <p className="text-neutral-400 mt-2">Try adjusting your filters.</p>
+                </div>
+              )}
             </div>
           </div>
         </main>
@@ -167,17 +333,21 @@ const App: React.FC = () => {
       {view === 'admin' && (
         <main className="flex-1 pt-40 pb-24 px-6 bg-neutral-100 flex items-center justify-center">
           {!isAuthenticated ? (
-            <div className="w-full max-w-md bg-white p-12 rounded-[2.5rem] shadow-2xl">
-              <h2 className="text-2xl font-bold serif italic mb-8 text-center">CMS Access</h2>
+            <div className="w-full max-w-md bg-white p-12 rounded-[2.5rem] shadow-2xl border border-neutral-200">
+              <div className="text-center mb-8">
+                 <h2 className="text-3xl font-bold serif italic mb-2">CMS Access</h2>
+                 <p className="text-neutral-400 text-sm">Authorized Personnel Only</p>
+              </div>
               <form onSubmit={handleLogin} className="space-y-6">
                 <input 
                   type="password" 
-                  placeholder="Password"
-                  className="w-full p-4 border rounded-xl outline-none"
+                  placeholder="Password (cedarcreek)"
+                  className={`w-full p-4 border rounded-xl outline-none text-center text-xl transition-all ${loginError ? 'border-red-500' : 'border-neutral-200'}`}
                   value={passwordInput}
                   onChange={e => setPasswordInput(e.target.value)}
+                  autoFocus
                 />
-                <button type="submit" className="w-full py-4 bg-lake text-white font-bold rounded-xl hover:bg-neutral-800 transition-all">Login</button>
+                <button type="submit" className="w-full py-4 bg-lake text-white font-black rounded-xl hover:bg-neutral-800 transition-all uppercase tracking-widest text-xs">Unlock Backend</button>
               </form>
             </div>
           ) : (
@@ -200,6 +370,25 @@ const App: React.FC = () => {
           onClose={() => setSelectedProperty(null)} 
         />
       )}
+
+      <footer className="bg-white border-t border-neutral-100 py-16">
+         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="text-center md:text-left">
+               <h3 className="text-xl font-bold serif mb-2">CEDAR <span className="text-luxury-gold italic">LUX</span></h3>
+               <p className="text-neutral-400 text-xs font-medium max-w-xs uppercase tracking-wider">Unrivaled lakefront masterpieces for the discerning Texan.</p>
+            </div>
+            <div className="flex gap-8 text-neutral-400">
+               <button onClick={() => setView('home')} className="hover:text-lake transition-colors text-xs font-bold uppercase tracking-widest">Home</button>
+               <button onClick={() => setView('listings')} className="hover:text-lake transition-colors text-xs font-bold uppercase tracking-widest">Collection</button>
+               <button onClick={() => setView('lifestyle')} className="hover:text-lake transition-colors text-xs font-bold uppercase tracking-widest">Lifestyle</button>
+            </div>
+            <div className="text-center md:text-right">
+               <p className="text-neutral-400 text-[10px] uppercase font-bold tracking-widest mb-2">Contact</p>
+               <p className="font-bold text-lake">{settings.phone}</p>
+            </div>
+         </div>
+      </footer>
+      
       <AIConsultant />
     </div>
   );

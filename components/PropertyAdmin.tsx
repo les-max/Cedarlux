@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Property, PropertyStatus, SiteSettings, Activity, LocalSpot } from '../types';
-import { Plus, X, Save, Trash2, Layout, Settings, Image as ImageIcon, Edit2, Phone, MapPin, Quote, Code, Map, Waves, Flag, Users, ShoppingBag, Utensils, Star, Sun, Coffee, Anchor } from 'lucide-react';
+import { Property, PropertyStatus, SiteSettings } from '../types';
+import { Layout, Settings, Edit2, Trash2, X, Sun, LogOut, Plus, Save } from 'lucide-react';
 
 interface PropertyAdminProps {
   properties: Property[];
@@ -11,8 +11,6 @@ interface PropertyAdminProps {
   onUpdateSettings: (settings: SiteSettings) => void;
   onLogout: () => void;
 }
-
-const ICON_MAP: Record<string, any> = { Waves, Flag, Users, ShoppingBag, Utensils, Star, Sun, Coffee, Anchor };
 
 export const PropertyAdmin: React.FC<PropertyAdminProps> = ({ 
   properties, 
@@ -64,93 +62,215 @@ export const PropertyAdmin: React.FC<PropertyAdminProps> = ({
     setEditingProperty(null);
   };
 
-  const addGalleryImage = () => {
-    setFormData(prev => ({
-      ...prev,
-      gallery: [...(prev.gallery || []), '']
-    }));
-  };
-
-  const updateGalleryImage = (idx: number, val: string) => {
-    const newGallery = [...(formData.gallery || [])];
-    newGallery[idx] = val;
-    setFormData({ ...formData, gallery: newGallery });
+  const saveSettings = () => {
+    onUpdateSettings(tempSettings);
+    alert('Settings Saved Successfully');
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-neutral-100 flex flex-col md:flex-row min-h-[800px] w-full max-w-7xl mx-auto">
+    <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-neutral-100 flex flex-col md:flex-row min-h-[700px] w-full max-w-6xl mx-auto">
+      {/* Sidebar */}
       <div className="w-full md:w-64 bg-lake p-8 text-white flex flex-col">
-        <div className="mb-12 text-center md:text-left">
-          <h2 className="text-xl font-bold tracking-tighter serif italic">CMS Backend</h2>
-        </div>
-        <nav className="flex-1 space-y-2">
-          <button onClick={() => setActiveTab('inventory')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'inventory' ? 'bg-luxury-gold' : 'hover:bg-white/10'}`}>
-            <Layout size={18} /> <span className="font-bold text-sm">Residences</span>
+        <h2 className="text-xl font-bold italic serif mb-12">CMS Dashboard</h2>
+        <nav className="flex-1 space-y-4">
+          <button 
+            onClick={() => setActiveTab('inventory')} 
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'inventory' ? 'bg-luxury-gold' : 'hover:bg-white/10'}`}
+          >
+            <Layout size={18} /> <span className="font-bold text-sm">Inventory</span>
           </button>
-          <button onClick={() => setActiveTab('lifestyle')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'lifestyle' ? 'bg-luxury-gold' : 'hover:bg-white/10'}`}>
-            <Sun size={18} /> <span className="font-bold text-sm">Lifestyle</span>
+          <button 
+            onClick={() => setActiveTab('lifestyle')} 
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'lifestyle' ? 'bg-luxury-gold' : 'hover:bg-white/10'}`}
+          >
+            <Sun size={18} /> <span className="font-bold text-sm">Lifestyle Content</span>
           </button>
-          <button onClick={() => setActiveTab('settings')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'settings' ? 'bg-luxury-gold' : 'hover:bg-white/10'}`}>
-            <Settings size={18} /> <span className="font-bold text-sm">Site Sections</span>
+          <button 
+            onClick={() => setActiveTab('settings')} 
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === 'settings' ? 'bg-luxury-gold' : 'hover:bg-white/10'}`}
+          >
+            <Settings size={18} /> <span className="font-bold text-sm">General Settings</span>
           </button>
         </nav>
         <button onClick={onLogout} className="mt-8 pt-8 border-t border-white/10 text-white/50 hover:text-white flex items-center gap-2">
-          <X size={14} /> Log Out
+          <LogOut size={16} /> Log Out
         </button>
       </div>
 
-      <div className="flex-1 p-8 md:p-12 overflow-y-auto">
+      {/* Main Panel */}
+      <div className="flex-1 p-8 md:p-12 overflow-y-auto max-h-[800px]">
         {activeTab === 'inventory' && (
            <div className="space-y-8">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h3 className="text-3xl font-bold">Property Inventory</h3>
-                <button onClick={() => { setFormData({ title: '', price: 0, beds: 0, baths: 0, sqft: 0, description: '', image: '', gallery: [], status: 'Available', neighborhood: settings.neighborhoods[0], features: [] }); setEditingProperty(null); setIsAdding(true); }} className="bg-lake text-white px-6 py-2 rounded-full font-bold">+ New Listing</button>
+              <div className="flex justify-between items-center">
+                 <h3 className="text-3xl font-bold serif italic">Property Management</h3>
+                 {!isAdding && (
+                   <button 
+                    onClick={() => { setIsAdding(true); setEditingProperty(null); }}
+                    className="bg-lake text-white px-6 py-2 rounded-full font-bold flex items-center gap-2"
+                   >
+                     <Plus size={18} /> New Listing
+                   </button>
+                 )}
               </div>
 
-              {isAdding && (
-                <form onSubmit={handlePropertySubmit} className="bg-neutral-50 p-6 rounded-2xl border mb-8 space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input placeholder="Title" className="p-3 border rounded-xl" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
-                    <input type="number" placeholder="Price" className="p-3 border rounded-xl" value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})} required />
-                    <input placeholder="Image URL" className="p-3 border rounded-xl" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} required />
-                    <select className="p-3 border rounded-xl" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as PropertyStatus})}>
-                      <option value="Available">Available</option>
-                      <option value="Under Construction">Under Construction</option>
-                      <option value="Sold">Sold</option>
-                    </select>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase text-neutral-400 ml-1">Gallery Photos</label>
-                    {formData.gallery?.map((img, i) => (
-                      <input key={i} placeholder={`Photo URL ${i+1}`} className="w-full p-3 border rounded-xl" value={img} onChange={e => updateGalleryImage(i, e.target.value)} />
-                    ))}
-                    <button type="button" onClick={addGalleryImage} className="text-xs text-luxury-gold font-bold p-2">+ Add Photo</button>
-                  </div>
-
-                  <div className="flex justify-end gap-3 pt-4">
-                    <button type="button" onClick={() => setIsAdding(false)} className="px-6 py-2 font-bold text-neutral-500">Cancel</button>
-                    <button type="submit" className="px-8 py-2 bg-luxury-gold text-white rounded-full font-bold">Save Residence</button>
-                  </div>
-                </form>
+              {isAdding ? (
+                 <form onSubmit={handlePropertySubmit} className="bg-neutral-50 p-8 rounded-3xl border border-neutral-200 space-y-6">
+                    <div className="flex justify-between items-center mb-4">
+                       <h4 className="text-xl font-bold">{editingProperty ? 'Edit Residence' : 'Add Residence'}</h4>
+                       <button onClick={() => setIsAdding(false)}><X /></button>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       <div className="space-y-2">
+                          <label className="text-xs font-bold uppercase text-neutral-400">Title</label>
+                          <input className="w-full p-3 border rounded-xl" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
+                       </div>
+                       <div className="space-y-2">
+                          <label className="text-xs font-bold uppercase text-neutral-400">Price (USD)</label>
+                          <input type="number" className="w-full p-3 border rounded-xl" value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})} required />
+                       </div>
+                       <div className="space-y-2">
+                          <label className="text-xs font-bold uppercase text-neutral-400">Main Image URL</label>
+                          <input className="w-full p-3 border rounded-xl" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} required />
+                       </div>
+                       <div className="space-y-2">
+                          <label className="text-xs font-bold uppercase text-neutral-400">Neighborhood</label>
+                          <select className="w-full p-3 border rounded-xl" value={formData.neighborhood} onChange={e => setFormData({...formData, neighborhood: e.target.value})}>
+                             {settings.neighborhoods.map(n => <option key={n} value={n}>{n}</option>)}
+                          </select>
+                       </div>
+                       <div className="space-y-2">
+                          <label className="text-xs font-bold uppercase text-neutral-400">Status</label>
+                          <select className="w-full p-3 border rounded-xl" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as PropertyStatus})}>
+                             <option value="Available">Available</option>
+                             <option value="Under Construction">Under Construction</option>
+                             <option value="Sold">Sold</option>
+                          </select>
+                       </div>
+                       <div className="space-y-2">
+                          <label className="text-xs font-bold uppercase text-neutral-400">SqFt</label>
+                          <input type="number" className="w-full p-3 border rounded-xl" value={formData.sqft} onChange={e => setFormData({...formData, sqft: Number(e.target.value)})} />
+                       </div>
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-xs font-bold uppercase text-neutral-400">Description</label>
+                       <textarea className="w-full p-3 border rounded-xl h-32" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
+                    </div>
+                    <div className="flex justify-end gap-4">
+                       <button type="button" onClick={() => setIsAdding(false)} className="px-6 py-2 font-bold text-neutral-500">Cancel</button>
+                       <button type="submit" className="bg-luxury-gold text-white px-8 py-2 rounded-full font-bold">Save Listing</button>
+                    </div>
+                 </form>
+              ) : (
+                <div className="grid grid-cols-1 gap-4">
+                   {properties.map(p => (
+                      <div key={p.id} className="bg-neutral-50 p-6 rounded-2xl flex items-center justify-between border border-neutral-100">
+                         <div className="flex items-center gap-6">
+                            <img src={p.image} className="w-20 h-16 object-cover rounded-xl" alt="" />
+                            <div>
+                               <h4 className="font-bold text-lake">{p.title}</h4>
+                               <p className="text-xs text-neutral-400 font-bold uppercase tracking-wider">{p.neighborhood} • {p.status}</p>
+                            </div>
+                         </div>
+                         <div className="flex gap-2">
+                            <button onClick={() => startEdit(p)} className="p-3 bg-white rounded-xl text-neutral-400 hover:text-lake transition-colors"><Edit2 size={18}/></button>
+                            <button onClick={() => onDelete(p.id)} className="p-3 bg-white rounded-xl text-neutral-400 hover:text-red-500 transition-colors"><Trash2 size={18}/></button>
+                         </div>
+                      </div>
+                   ))}
+                </div>
               )}
+           </div>
+        )}
 
-              <div className="grid grid-cols-1 gap-4">
-                {properties.map(p => (
-                   <div key={p.id} className="p-4 border rounded-2xl flex justify-between items-center bg-white shadow-sm">
-                      <div className="flex items-center gap-4">
-                        <img src={p.image} className="w-16 h-12 object-cover rounded-lg" />
-                        <div>
-                          <p className="font-bold text-neutral-800">{p.title}</p>
-                          <p className="text-[10px] uppercase font-black text-neutral-400 tracking-wider">{p.neighborhood} • {p.status}</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <button onClick={() => startEdit(p)} className="p-2.5 bg-neutral-100 rounded-xl hover:bg-lake hover:text-white transition-all"><Edit2 size={16}/></button>
-                        <button onClick={() => { if(confirm('Delete listing?')) onDelete(p.id)}} className="p-2.5 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><Trash2 size={16}/></button>
-                      </div>
-                   </div>
-                ))}
+        {activeTab === 'lifestyle' && (
+           <div className="space-y-8">
+              <div className="flex justify-between items-center">
+                 <h3 className="text-3xl font-bold serif italic">Lifestyle Content</h3>
+                 <button onClick={saveSettings} className="bg-lake text-white px-6 py-2 rounded-full font-bold flex items-center gap-2">
+                    <Save size={18} /> Save Changes
+                 </button>
+              </div>
+              <div className="grid grid-cols-1 gap-8">
+                 <div className="space-y-4 bg-neutral-50 p-8 rounded-3xl border border-neutral-100">
+                    <h4 className="font-bold text-neutral-400 uppercase tracking-widest text-xs">Hero Section (Lifestyle Page)</h4>
+                    <input 
+                      placeholder="Lifestyle Hero Headline" 
+                      className="w-full p-4 border rounded-xl" 
+                      value={tempSettings.lifestyleHeroHeadline} 
+                      onChange={e => setTempSettings({...tempSettings, lifestyleHeroHeadline: e.target.value})} 
+                    />
+                    <textarea 
+                      placeholder="Lifestyle Hero Subheadline" 
+                      className="w-full p-4 border rounded-xl h-24" 
+                      value={tempSettings.lifestyleHeroSubheadline} 
+                      onChange={e => setTempSettings({...tempSettings, lifestyleHeroSubheadline: e.target.value})} 
+                    />
+                    <input 
+                      placeholder="Hero Image URL" 
+                      className="w-full p-4 border rounded-xl" 
+                      value={tempSettings.lifestyleHeroImage} 
+                      onChange={e => setTempSettings({...tempSettings, lifestyleHeroImage: e.target.value})} 
+                    />
+                 </div>
+                 
+                 <div className="space-y-4 bg-neutral-50 p-8 rounded-3xl border border-neutral-100">
+                    <h4 className="font-bold text-neutral-400 uppercase tracking-widest text-xs">Home Page Teaser</h4>
+                    <input 
+                      placeholder="Headline" 
+                      className="w-full p-4 border rounded-xl" 
+                      value={tempSettings.lifestyleHeadline} 
+                      onChange={e => setTempSettings({...tempSettings, lifestyleHeadline: e.target.value})} 
+                    />
+                    <textarea 
+                      placeholder="Subheadline" 
+                      className="w-full p-4 border rounded-xl" 
+                      value={tempSettings.lifestyleSubheadline} 
+                      onChange={e => setTempSettings({...tempSettings, lifestyleSubheadline: e.target.value})} 
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       <input 
+                         placeholder="Quote" 
+                         className="p-4 border rounded-xl" 
+                         value={tempSettings.lifestyleQuote} 
+                         onChange={e => setTempSettings({...tempSettings, lifestyleQuote: e.target.value})} 
+                       />
+                       <input 
+                         placeholder="Quote Author" 
+                         className="p-4 border rounded-xl" 
+                         value={tempSettings.lifestyleQuoteAuthor} 
+                         onChange={e => setTempSettings({...tempSettings, lifestyleQuoteAuthor: e.target.value})} 
+                       />
+                    </div>
+                 </div>
+              </div>
+           </div>
+        )}
+
+        {activeTab === 'settings' && (
+           <div className="space-y-8">
+              <div className="flex justify-between items-center">
+                 <h3 className="text-3xl font-bold serif italic">General Site Settings</h3>
+                 <button onClick={saveSettings} className="bg-lake text-white px-6 py-2 rounded-full font-bold flex items-center gap-2">
+                    <Save size={18} /> Save Changes
+                 </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-neutral-400">Company Name</label>
+                    <input className="w-full p-3 border rounded-xl" value={tempSettings.companyName} onChange={e => setTempSettings({...tempSettings, companyName: e.target.value})} />
+                 </div>
+                 <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-neutral-400">Contact Phone</label>
+                    <input className="w-full p-3 border rounded-xl" value={tempSettings.phone} onChange={e => setTempSettings({...tempSettings, phone: e.target.value})} />
+                 </div>
+                 <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-neutral-400">Home Hero Headline</label>
+                    <input className="w-full p-3 border rounded-xl" value={tempSettings.heroHeadline} onChange={e => setTempSettings({...tempSettings, heroHeadline: e.target.value})} />
+                 </div>
+                 <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-neutral-400">Home Hero Image</label>
+                    <input className="w-full p-3 border rounded-xl" value={tempSettings.heroImage} onChange={e => setTempSettings({...tempSettings, heroImage: e.target.value})} />
+                 </div>
               </div>
            </div>
         )}
