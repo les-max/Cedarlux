@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Property } from '../types.ts';
+import { Property } from '../types';
 import { Bed, Bath, Move, MapPin } from 'lucide-react';
 
 interface PropertyCardProps {
@@ -37,29 +36,29 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, onViewDeta
       <div className="p-6">
         <div className="flex items-center text-neutral-500 text-sm mb-2">
           <MapPin size={14} className="mr-1" />
-          {property.neighborhood}, Cedar Creek Lake
+          {property.neighborhood}
         </div>
         <h3 className="text-2xl font-semibold mb-3">{property.title}</h3>
         <p className="text-luxury-gold text-2xl font-bold mb-4">{formatter.format(property.price)}</p>
         
-        <div className="flex justify-between items-center py-4 border-t border-neutral-100">
+        <div className="flex justify-between items-center py-4 border-t border-neutral-100 mb-4">
           <div className="flex items-center gap-1.5 text-neutral-600">
             <Bed size={18} />
-            <span className="text-sm font-medium">{property.beds} Beds</span>
+            <span className="text-sm font-medium">{property.beds}</span>
           </div>
           <div className="flex items-center gap-1.5 text-neutral-600">
             <Bath size={18} />
-            <span className="text-sm font-medium">{property.baths} Baths</span>
+            <span className="text-sm font-medium">{property.baths}</span>
           </div>
           <div className="flex items-center gap-1.5 text-neutral-600">
             <Move size={18} />
-            <span className="text-sm font-medium">{property.sqft.toLocaleString()} SqFt</span>
+            <span className="text-sm font-medium">{property.sqft.toLocaleString()}</span>
           </div>
         </div>
         
         <button 
           onClick={() => onViewDetails?.(property)}
-          className="w-full mt-2 py-3 bg-lake text-white rounded-lg font-semibold hover:bg-neutral-800 transition-colors"
+          className="w-full py-3 bg-lake text-white rounded-lg font-semibold hover:bg-neutral-800 transition-colors"
         >
           View Details
         </button>
