@@ -3,7 +3,7 @@ import { Property, SiteSettings } from './types';
 export const DEFAULT_SETTINGS: SiteSettings = {
   // [ACTION REQUIRED] Replace the URL below with the URL of the image you uploaded
   logoImage: 'https://lesbrownimages.carrd.co/assets/images/image03.png?v=285ff39d$0',
-  heroImage: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2070',
+  heroImage: 'https://photos.zillowstatic.com/fp/478eb995b712eb79af80c59ea8f527ba-cc_ft_768.webp',
   heroHeadline: 'Crafting Legacies on the Waterfront.',
   heroSubheadline: 'Bespoke architectural masterpieces designed for those who demand the pinnacle of Cedar Creek Lake living.',
   companyName: 'Cedar Lux Properties',
