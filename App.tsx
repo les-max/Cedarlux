@@ -30,7 +30,7 @@ const App: React.FC = () => {
     return DEFAULT_SETTINGS;
   });
 
-  const [view, setView] = useState<'home' | 'admin' | 'listings' | 'lifestyle'>('home');
+  const [view, setView] = useState<'home' | 'admin' | 'listings' | 'lifestyle' | 'about'>('home');
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
@@ -99,6 +99,7 @@ const App: React.FC = () => {
 
           <div className="hidden md:flex items-center gap-10">
             <button onClick={() => setView('home')} className={`text-xs font-bold tracking-[0.2em] uppercase transition-colors ${view === 'home' ? 'text-luxury-gold' : 'text-neutral-600 hover:text-lake'}`}>Home</button>
+            <button onClick={() => setView('about')} className={`text-xs font-bold tracking-[0.2em] uppercase transition-colors ${view === 'about' ? 'text-luxury-gold' : 'text-neutral-600 hover:text-lake'}`}>About</button>
             <button onClick={() => setView('listings')} className={`text-xs font-bold tracking-[0.2em] uppercase transition-colors ${view === 'listings' ? 'text-luxury-gold' : 'text-neutral-600 hover:text-lake'}`}>Collection</button>
             <button onClick={() => setView('lifestyle')} className={`text-xs font-bold tracking-[0.2em] uppercase transition-colors ${view === 'lifestyle' ? 'text-luxury-gold' : 'text-neutral-600 hover:text-lake'}`}>Lifestyle</button>
             <button 
@@ -119,6 +120,7 @@ const App: React.FC = () => {
       {isMenuOpen && (
         <div className="fixed inset-0 z-[60] bg-white flex flex-col p-12 pt-32 gap-8 md:hidden">
           <button onClick={() => { setView('home'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left">Home</button>
+          <button onClick={() => { setView('about'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left">About Us</button>
           <button onClick={() => { setView('listings'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left">The Collection</button>
           <button onClick={() => { setView('lifestyle'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left">Lifestyle</button>
           <button onClick={() => { setView('admin'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left text-luxury-gold">CMS Login</button>
@@ -193,6 +195,87 @@ const App: React.FC = () => {
               </div>
             </div>
           </section>
+        </main>
+      )}
+
+      {view === 'about' && (
+        <main className="flex-1">
+           <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+            <div className="absolute inset-0">
+              <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover brightness-[0.5]" alt="About Cedar Lux" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
+            </div>
+            <div className="relative z-10 text-center text-white px-6">
+               <h1 className="text-5xl md:text-7xl font-medium serif italic mb-6">Our Story</h1>
+               <p className="text-xl font-light tracking-wide uppercase">Building Legacies on Cedar Creek Lake</p>
+            </div>
+          </section>
+
+          <div className="max-w-4xl mx-auto px-6 py-24">
+             {/* Introduction */}
+             <div className="mb-16 text-center">
+                <h2 className="text-4xl font-bold serif italic mb-6 text-lake">About Cedar Lux Properties</h2>
+                <p className="text-xl text-neutral-500 leading-relaxed">
+                  At Cedar Lux Properties, our passion is creating exceptional lakefront and lake-inspired homes that blend thoughtful design with everyday livability. Founded in 2015 by real-estate developer Gary Payne, Cedar Lux has built its reputation on quality, attention to detail, and a deep understanding of what makes lake living truly rewarding.
+                </p>
+             </div>
+
+             {/* Content Blocks */}
+             <div className="space-y-16">
+                <div>
+                   <h3 className="text-2xl font-bold serif mb-4">A Builder With Lake Expertise</h3>
+                   <p className="text-neutral-500 leading-relaxed">
+                     Gary has been building on Cedar Creek Lake since 2011, giving him first-hand insight into the features and infrastructure that matter most — not just on paper, but in real life. His experience evaluating communities led him to partner with Emerald Bay at Cedar Creek Lake, a master-planned, gated lake community designed for full-time living and long-term enjoyment.
+                   </p>
+                   <p className="text-neutral-500 leading-relaxed mt-4">
+                     Emerald Bay’s deep-water location, easy access to boating, and thoughtful layout stood out as a place where clients — and Cedar Lux — could build with confidence and pride.
+                   </p>
+                </div>
+
+                <div className="bg-neutral-50 p-8 md:p-12 rounded-[2.5rem] border border-neutral-100">
+                   <h3 className="text-2xl font-bold serif mb-4">Homes Designed for Real Life</h3>
+                   <p className="text-neutral-500 leading-relaxed">
+                     Our first spec home at Emerald Bay brings the Cedar Lux vision to life: a spacious, luxury residence that showcases how a thoughtfully crafted home feels and functions on the lake. This four-bedroom design, set to break ground soon, includes features buyers love — premium appliances, integrated smart home systems, hardwood floors, and basements designed for livability and lake views.
+                   </p>
+                   <blockquote className="my-8 border-l-4 border-luxury-gold pl-6 py-2">
+                      <p className="text-xl font-serif italic text-lake">"Built to the nines."</p>
+                      <footer className="text-sm font-bold uppercase tracking-widest text-neutral-400 mt-2">— Gary Payne</footer>
+                   </blockquote>
+                   <p className="text-neutral-500 leading-relaxed">
+                     It's a phrase Gary uses to describe the high standards, attention to detail, and quality materials that go into every project.
+                   </p>
+                </div>
+
+                 <div>
+                   <h3 className="text-2xl font-bold serif mb-4">A Collaborative Approach</h3>
+                   <p className="text-neutral-500 leading-relaxed">
+                     Our team works closely with designers, craftsmen, and clients to ensure every build reflects personal style and practical living. Gary partners with his wife, Chelsea Payne, who leads the design direction and infuses each home with refined, cohesive aesthetics that elevate the overall experience.
+                   </p>
+                   <p className="text-neutral-500 leading-relaxed mt-4">
+                     Because great design goes beyond finishes, we’re proud that Emerald Bay has recognized Cedar Lux as one of its preferred builders — a testament to our commitment to excellence.
+                   </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 className="text-2xl font-bold serif mb-4">Why It Matters</h3>
+                        <p className="text-neutral-500 leading-relaxed">
+                            Choosing where to build is about more than location — it’s about lifestyle, infrastructure, and long-term enjoyment. At Cedar Lux, we take that choice seriously, focusing on communities like Emerald Bay where water access, modern utilities, functional planning, and a sense of community come together to create not just a home, but a way of life.
+                        </p>
+                    </div>
+                    <div className="h-64 rounded-2xl overflow-hidden shadow-xl">
+                        <img src="https://images.unsplash.com/photo-1510627489930-0c1b0dc58e85?auto=format&fit=crop&q=80&w=1000" className="w-full h-full object-cover" alt="Lake Lifestyle" />
+                    </div>
+                </div>
+                
+                <div className="text-center py-12 border-t border-neutral-100">
+                    <p className="text-xl md:text-2xl font-serif italic text-lake max-w-2xl mx-auto">
+                        "Whether you’re building a permanent residence, a weekend retreat, or a legacy property for years to come, Cedar Lux Properties is here to guide, design, and build with craftsmanship and care."
+                    </p>
+                </div>
+
+             </div>
+          </div>
         </main>
       )}
 
@@ -417,6 +500,7 @@ const App: React.FC = () => {
             </div>
             <div className="flex gap-8 text-neutral-400">
                <button onClick={() => setView('home')} className="hover:text-lake transition-colors text-xs font-bold uppercase tracking-widest">Home</button>
+               <button onClick={() => setView('about')} className="hover:text-lake transition-colors text-xs font-bold uppercase tracking-widest">About</button>
                <button onClick={() => setView('listings')} className="hover:text-lake transition-colors text-xs font-bold uppercase tracking-widest">Collection</button>
                <button onClick={() => setView('lifestyle')} className="hover:text-lake transition-colors text-xs font-bold uppercase tracking-widest">Lifestyle</button>
             </div>
