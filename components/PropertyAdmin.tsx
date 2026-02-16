@@ -271,6 +271,16 @@ export const PropertyAdmin: React.FC<PropertyAdminProps> = ({
                     <label className="text-xs font-bold uppercase text-neutral-400">Home Hero Image</label>
                     <input className="w-full p-3 border rounded-xl" value={tempSettings.heroImage} onChange={e => setTempSettings({...tempSettings, heroImage: e.target.value})} />
                  </div>
+                 <div className="col-span-1 md:col-span-2 space-y-2">
+                    <label className="text-xs font-bold uppercase text-neutral-400">Header Scripts (Analytics, Pixel, etc.)</label>
+                    <textarea 
+                        className="w-full p-3 border rounded-xl h-40 font-mono text-xs text-neutral-600" 
+                        value={tempSettings.externalScripts} 
+                        onChange={e => setTempSettings({...tempSettings, externalScripts: e.target.value})}
+                        placeholder="<!-- Paste your Google Analytics or Facebook Pixel code here -->"
+                    />
+                    <p className="text-[10px] text-neutral-400">Warning: Valid HTML/JS only. These scripts will be injected into the &lt;head&gt; of your site.</p>
+                 </div>
               </div>
            </div>
         )}

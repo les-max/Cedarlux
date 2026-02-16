@@ -53,6 +53,31 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [view]);
 
+  // Inject External Scripts (Analytics, etc.)
+  useEffect(() => {
+    // Cleanup previously injected scripts
+    const existing = document.querySelectorAll('[data-injected-script="true"]');
+    existing.forEach(el => el.remove());
+
+    if (settings.externalScripts && settings.externalScripts.trim()) {
+      try {
+        // Use createContextualFragment to correctly parse and allow execution of script tags
+        const range = document.createRange();
+        range.selectNode(document.head);
+        const fragment = range.createContextualFragment(settings.externalScripts);
+        
+        Array.from(fragment.children).forEach(child => {
+          if (child instanceof HTMLElement) {
+            child.setAttribute('data-injected-script', 'true');
+            document.head.appendChild(child);
+          }
+        });
+      } catch (e) {
+        console.error("Failed to inject external scripts:", e);
+      }
+    }
+  }, [settings.externalScripts]);
+
   const addProperty = (newProperty: Property) => {
     setProperties(prev => [newProperty, ...prev]);
   };
