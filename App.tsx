@@ -13,12 +13,12 @@ import {
 
 const App: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>(() => {
-    const saved = localStorage.getItem('creekside_properties');
+    const saved = localStorage.getItem('creekside_properties_v2');
     return saved ? JSON.parse(saved) : INITIAL_PROPERTIES;
   });
 
   const [settings, setSettings] = useState<SiteSettings>(() => {
-    const saved = localStorage.getItem('creekside_settings');
+    const saved = localStorage.getItem('creekside_settings_v2');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -41,11 +41,11 @@ const App: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<string>('All');
 
   useEffect(() => {
-    localStorage.setItem('creekside_properties', JSON.stringify(properties));
+    localStorage.setItem('creekside_properties_v2', JSON.stringify(properties));
   }, [properties]);
 
   useEffect(() => {
-    localStorage.setItem('creekside_settings', JSON.stringify(settings));
+    localStorage.setItem('creekside_settings_v2', JSON.stringify(settings));
   }, [settings]);
 
   // Scroll to top on view change
