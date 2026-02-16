@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Property, PropertyStatus, SiteSettings } from '../types';
-import { Layout, Settings, Edit2, Trash2, X, Sun, LogOut, Plus, Save } from 'lucide-react';
+import { Layout, Settings, Edit2, Trash2, X, Sun, LogOut, Plus, Save, Code, Copy, CheckCircle } from 'lucide-react';
 
 interface PropertyAdminProps {
   properties: Property[];
@@ -24,6 +24,7 @@ export const PropertyAdmin: React.FC<PropertyAdminProps> = ({
   const [activeTab, setActiveTab] = useState<'inventory' | 'settings' | 'lifestyle'>('inventory');
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [copied, setCopied] = useState(false);
   
   const [formData, setFormData] = useState<Partial<Property>>({
     title: '',
@@ -65,6 +66,23 @@ export const PropertyAdmin: React.FC<PropertyAdminProps> = ({
   const saveSettings = () => {
     onUpdateSettings(tempSettings);
     alert('Settings Saved Successfully');
+  };
+
+  const generatePersistentCode = () => {
+    const settingsStr = JSON.stringify(tempSettings, null, 2);
+    const propertiesStr = JSON.stringify(properties, null, 2);
+    
+    return `import { Property, SiteSettings } from './types';
+
+export const DEFAULT_SETTINGS: SiteSettings = ${settingsStr};
+
+export const INITIAL_PROPERTIES: Property[] = ${propertiesStr};`;
+  };
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(generatePersistentCode());
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
   };
 
   return (
@@ -280,6 +298,33 @@ export const PropertyAdmin: React.FC<PropertyAdminProps> = ({
                         placeholder="<!-- Paste your Google Analytics or Facebook Pixel code here -->"
                     />
                     <p className="text-[10px] text-neutral-400">Warning: Valid HTML/JS only. These scripts will be injected into the &lt;head&gt; of your site.</p>
+                 </div>
+                 
+                 {/* Persistence / Export Section */}
+                 <div className="col-span-1 md:col-span-2 mt-8 pt-8 border-t border-neutral-100">
+                    <div className="bg-neutral-900 text-white p-8 rounded-2xl">
+                        <div className="flex items-start justify-between mb-6">
+                            <div>
+                                <h4 className="text-xl font-bold flex items-center gap-2"><Code size={20} className="text-luxury-gold"/> Developer Data Persistence</h4>
+                                <p className="text-neutral-400 text-sm mt-2 max-w-lg">
+                                    Since this site runs without a database, changes are saved to your browser's local storage. 
+                                    To make your changes permanent for all visitors, copy the code below and replace the content of 
+                                    <code className="bg-white/10 px-2 py-0.5 rounded mx-1 text-luxury-gold">constants.tsx</code> in your source code.
+                                </p>
+                            </div>
+                            <button 
+                                onClick={handleCopyCode} 
+                                className={`px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all ${copied ? 'bg-green-500 text-white' : 'bg-luxury-gold text-white hover:bg-white hover:text-lake'}`}
+                            >
+                                {copied ? <><CheckCircle size={18} /> Copied!</> : <><Copy size={18} /> Copy Code</>}
+                            </button>
+                        </div>
+                        <div className="relative">
+                            <pre className="bg-black/50 p-6 rounded-xl overflow-x-auto text-xs font-mono text-neutral-300 h-64 border border-white/10">
+                                {generatePersistentCode()}
+                            </pre>
+                        </div>
+                    </div>
                  </div>
               </div>
            </div>
