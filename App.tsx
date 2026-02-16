@@ -4,11 +4,12 @@ import { INITIAL_PROPERTIES, DEFAULT_SETTINGS } from './constants';
 import { PropertyCard } from './components/PropertyCard';
 import { PropertyAdmin } from './components/PropertyAdmin';
 import { PropertyDetailsModal } from './components/PropertyDetailsModal';
+import { ContactForm } from './components/ContactForm';
 import { 
   Menu, X, LayoutDashboard, 
   ArrowRight, Quote, Search, ChevronLeft, 
   Waves, Flag, Users, ShoppingBag, Utensils, Anchor, MapPin, 
-  Sun, Coffee, Star, Instagram, Facebook
+  Sun, Coffee, Star, Instagram, Facebook, Phone, Mail
 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -30,14 +31,13 @@ const App: React.FC = () => {
     return DEFAULT_SETTINGS;
   });
 
-  const [view, setView] = useState<'home' | 'admin' | 'listings' | 'lifestyle' | 'about'>('home');
+  const [view, setView] = useState<'home' | 'admin' | 'listings' | 'lifestyle' | 'about' | 'contact'>('home');
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loginError, setLoginError] = useState(false);
 
-  const [filterNeighborhood, setFilterNeighborhood] = useState<string>('All');
   const [filterStatus, setFilterStatus] = useState<string>('All');
 
   useEffect(() => {
@@ -55,13 +55,11 @@ const App: React.FC = () => {
 
   // Inject External Scripts (Analytics, etc.)
   useEffect(() => {
-    // Cleanup previously injected scripts
     const existing = document.querySelectorAll('[data-injected-script="true"]');
     existing.forEach(el => el.remove());
 
     if (settings.externalScripts && settings.externalScripts.trim()) {
       try {
-        // Use createContextualFragment to correctly parse and allow execution of script tags
         const range = document.createRange();
         range.selectNode(document.head);
         const fragment = range.createContextualFragment(settings.externalScripts);
@@ -102,12 +100,10 @@ const App: React.FC = () => {
   };
 
   const filteredProperties = properties.filter(p => {
-    const neighborhoodMatch = filterNeighborhood === 'All' || p.neighborhood === filterNeighborhood;
     const statusMatch = filterStatus === 'All' || p.status === filterStatus;
-    return neighborhoodMatch && statusMatch;
+    return statusMatch;
   });
 
-  const neighborhoodsList = ['All', ...settings.neighborhoods];
   const statusesList = ['All', 'Available', 'Under Construction', 'Sold'];
 
   return (
@@ -127,6 +123,7 @@ const App: React.FC = () => {
             <button onClick={() => setView('about')} className={`text-xs font-bold tracking-[0.2em] uppercase transition-colors ${view === 'about' ? 'text-luxury-gold' : 'text-neutral-600 hover:text-lake'}`}>About</button>
             <button onClick={() => setView('listings')} className={`text-xs font-bold tracking-[0.2em] uppercase transition-colors ${view === 'listings' ? 'text-luxury-gold' : 'text-neutral-600 hover:text-lake'}`}>Collection</button>
             <button onClick={() => setView('lifestyle')} className={`text-xs font-bold tracking-[0.2em] uppercase transition-colors ${view === 'lifestyle' ? 'text-luxury-gold' : 'text-neutral-600 hover:text-lake'}`}>Lifestyle</button>
+            <button onClick={() => setView('contact')} className={`text-xs font-bold tracking-[0.2em] uppercase transition-colors ${view === 'contact' ? 'text-luxury-gold' : 'text-neutral-600 hover:text-lake'}`}>Contact</button>
             <button 
               onClick={() => setView('admin')} 
               className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-xs uppercase tracking-[0.1em] transition-all ${view === 'admin' ? 'bg-lake text-white' : 'border border-lake text-lake hover:bg-lake hover:text-white'}`}
@@ -148,6 +145,7 @@ const App: React.FC = () => {
           <button onClick={() => { setView('about'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left">About Us</button>
           <button onClick={() => { setView('listings'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left">The Collection</button>
           <button onClick={() => { setView('lifestyle'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left">Lifestyle</button>
+          <button onClick={() => { setView('contact'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left">Contact</button>
           <button onClick={() => { setView('admin'); setIsMenuOpen(false); }} className="text-3xl font-bold serif text-left text-luxury-gold">CMS Login</button>
           <div className="mt-auto flex gap-6 text-neutral-400">
             <Instagram size={24} /> <Facebook size={24} />
@@ -237,7 +235,6 @@ const App: React.FC = () => {
           </section>
 
           <div className="max-w-4xl mx-auto px-6 py-24">
-             {/* Introduction */}
              <div className="mb-16 text-center">
                 <h2 className="text-4xl font-bold serif italic mb-6 text-lake">About Cedar Lux Properties</h2>
                 <p className="text-xl text-neutral-500 leading-relaxed">
@@ -245,60 +242,28 @@ const App: React.FC = () => {
                 </p>
              </div>
 
-             {/* Content Blocks */}
              <div className="space-y-16">
                 <div>
                    <h3 className="text-2xl font-bold serif mb-4">A Builder With Lake Expertise</h3>
                    <p className="text-neutral-500 leading-relaxed">
                      Gary has been building on Cedar Creek Lake since 2011, giving him first-hand insight into the features and infrastructure that matter most — not just on paper, but in real life. His experience evaluating communities led him to partner with Emerald Bay at Cedar Creek Lake, a master-planned, gated lake community designed for full-time living and long-term enjoyment.
                    </p>
-                   <p className="text-neutral-500 leading-relaxed mt-4">
-                     Emerald Bay’s deep-water location, easy access to boating, and thoughtful layout stood out as a place where clients — and Cedar Lux — could build with confidence and pride.
-                   </p>
                 </div>
 
                 <div className="bg-neutral-50 p-8 md:p-12 rounded-[2.5rem] border border-neutral-100">
                    <h3 className="text-2xl font-bold serif mb-4">Homes Designed for Real Life</h3>
                    <p className="text-neutral-500 leading-relaxed">
-                     Our first spec home at Emerald Bay brings the Cedar Lux vision to life: a spacious, luxury residence that showcases how a thoughtfully crafted home feels and functions on the lake. This four-bedroom design, set to break ground soon, includes features buyers love — premium appliances, integrated smart home systems, hardwood floors, and basements designed for livability and lake views.
+                     Our first spec home at Emerald Bay brings the Cedar Lux vision to life: a spacious, luxury residence that showcases how a thoughtfully crafted home feels and functions on the lake.
                    </p>
                    <blockquote className="my-8 border-l-4 border-luxury-gold pl-6 py-2">
                       <p className="text-xl font-serif italic text-lake">"Built to the nines."</p>
                       <footer className="text-sm font-bold uppercase tracking-widest text-neutral-400 mt-2">— Gary Payne</footer>
                    </blockquote>
-                   <p className="text-neutral-500 leading-relaxed">
-                     It's a phrase Gary uses to describe the high standards, attention to detail, and quality materials that go into every project.
-                   </p>
-                </div>
-
-                 <div>
-                   <h3 className="text-2xl font-bold serif mb-4">A Collaborative Approach</h3>
-                   <p className="text-neutral-500 leading-relaxed">
-                     Our team works closely with designers, craftsmen, and clients to ensure every build reflects personal style and practical living. Gary partners with his wife, Chelsea Payne, who leads the design direction and infuses each home with refined, cohesive aesthetics that elevate the overall experience.
-                   </p>
-                   <p className="text-neutral-500 leading-relaxed mt-4">
-                     Because great design goes beyond finishes, we’re proud that Emerald Bay has recognized Cedar Lux as one of its preferred builders — a testament to our commitment to excellence.
-                   </p>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <h3 className="text-2xl font-bold serif mb-4">Why It Matters</h3>
-                        <p className="text-neutral-500 leading-relaxed">
-                            Choosing where to build is about more than location — it’s about lifestyle, infrastructure, and long-term enjoyment. At Cedar Lux, we take that choice seriously, focusing on communities like Emerald Bay where water access, modern utilities, functional planning, and a sense of community come together to create not just a home, but a way of life.
-                        </p>
-                    </div>
-                    <div className="h-64 rounded-2xl overflow-hidden shadow-xl">
-                        <img src="https://photos.zillowstatic.com/fp/478eb995b712eb79af80c59ea8f527ba-cc_ft_768.webp" className="w-full h-full object-cover" alt="Lake Lifestyle" />
-                    </div>
                 </div>
                 
-                <div className="text-center py-12 border-t border-neutral-100">
-                    <p className="text-xl md:text-2xl font-serif italic text-lake max-w-2xl mx-auto">
-                        "Whether you’re building a permanent residence, a weekend retreat, or a legacy property for years to come, Cedar Lux Properties is here to guide, design, and build with craftsmanship and care."
-                    </p>
+                <div className="text-center pt-8">
+                   <button onClick={() => setView('contact')} className="px-12 py-5 bg-lake text-white font-black rounded-full uppercase tracking-[0.2em] text-xs shadow-xl hover:bg-neutral-800 transition-all">Start Your Project With Us</button>
                 </div>
-
              </div>
           </div>
         </main>
@@ -306,7 +271,6 @@ const App: React.FC = () => {
 
       {view === 'lifestyle' && (
         <main className="flex-1">
-          {/* Hero */}
           <section className="relative h-[80vh] flex items-center justify-center text-center overflow-hidden">
             <div className="absolute inset-0">
               <img src={settings.lifestyleHeroImage} className="w-full h-full object-cover brightness-[0.4]" alt="Lifestyle" />
@@ -319,102 +283,20 @@ const App: React.FC = () => {
             </div>
           </section>
           
-          {/* Dallas Proximity Section */}
           <section className="py-32 bg-white overflow-hidden">
             <div className="max-w-7xl mx-auto px-6">
               <div className="flex flex-col md:flex-row items-center gap-16">
                 <div className="flex-1">
                   <h2 className="text-4xl md:text-5xl font-bold serif italic mb-6">The Best of Both Worlds</h2>
                   <p className="text-neutral-500 text-lg leading-relaxed mb-8">
-                    Located just 60 minutes from the Dallas metroplex, Cedar Creek Lake is the premier sanctuary for the city's most discerning families. Whether it's a weekend retreat or a permanent legacy estate, you're never far from the city's pulse, yet worlds away from its pace.
+                    Located just 60 minutes from the Dallas metroplex, Cedar Creek Lake is the premier sanctuary for the city's most discerning families.
                   </p>
-                  <div className="flex gap-12">
-                    <div>
-                      <p className="text-luxury-gold text-3xl font-bold serif">60m</p>
-                      <p className="text-xs uppercase font-black tracking-widest text-neutral-400">From Dallas</p>
-                    </div>
-                    <div>
-                      <p className="text-luxury-gold text-3xl font-bold serif">32k</p>
-                      <p className="text-xs uppercase font-black tracking-widest text-neutral-400">Acres of Water</p>
-                    </div>
-                    <div>
-                      <p className="text-luxury-gold text-3xl font-bold serif">24/7</p>
-                      <p className="text-xs uppercase font-black tracking-widest text-neutral-400">Gated Security</p>
-                    </div>
-                  </div>
                 </div>
                 <div className="flex-1 w-full h-[400px] bg-neutral-100 rounded-[3rem] overflow-hidden border border-neutral-100">
                    <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&q=80&w=2070" className="w-full h-full object-cover opacity-80" alt="Dallas Lake Life" />
                 </div>
               </div>
             </div>
-          </section>
-
-          {/* Activities Section */}
-          <section className="py-32 bg-neutral-50">
-             <div className="max-w-7xl mx-auto px-6">
-                <div className="text-center mb-20">
-                   <h2 className="text-4xl md:text-5xl font-bold serif italic mb-6 text-lake">Lakeside Luxury, Defined.</h2>
-                   <p className="text-neutral-500 max-w-2xl mx-auto">Cedar Creek Lake offers a lifestyle unmatched in Texas, blending absolute privacy with exhilarating recreation for every generation.</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                   {settings.activities.map(act => (
-                     <div key={act.id} className="p-8 bg-white rounded-[2.5rem] text-center hover:shadow-xl transition-all border border-neutral-100 group">
-                        <div className="w-20 h-20 bg-luxury-gold/10 group-hover:bg-luxury-gold rounded-full flex items-center justify-center mx-auto mb-6 text-luxury-gold group-hover:text-white transition-all shadow-sm">
-                           {act.icon === 'Waves' ? <Waves size={32} /> : act.icon === 'Flag' ? <Flag size={32} /> : <Anchor size={32} />}
-                        </div>
-                        <h3 className="text-2xl font-bold serif mb-4">{act.title}</h3>
-                        <p className="text-neutral-500 mb-8 leading-relaxed">{act.description}</p>
-                        <div className="flex flex-wrap gap-2 justify-center mt-auto">
-                           {act.highlights.map((h, idx) => (
-                             <span key={idx} className="px-3 py-1 bg-neutral-50 rounded-full text-[10px] font-black uppercase tracking-wider text-luxury-gold border border-neutral-200">{h}</span>
-                           ))}
-                        </div>
-                     </div>
-                   ))}
-                </div>
-             </div>
-          </section>
-
-          {/* Local Spots Curated Grid */}
-          <section className="py-32 bg-white">
-             <div className="max-w-7xl mx-auto px-6">
-                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-                   <div className="max-w-2xl">
-                      <h2 className="text-4xl font-bold serif italic mb-4">Lakeside Curations</h2>
-                      <p className="text-neutral-500">From fine dining at the Pinnacle Club to boutique shopping in Mabank, we've curated the absolute best of the Cedar Creek Lake region.</p>
-                   </div>
-                   <div className="hidden md:block">
-                      <div className="flex gap-4">
-                         <div className="flex items-center gap-2 text-luxury-gold font-bold text-xs uppercase tracking-widest">
-                            <Utensils size={14}/> Dining
-                         </div>
-                         <div className="flex items-center gap-2 text-neutral-400 font-bold text-xs uppercase tracking-widest">
-                            <ShoppingBag size={14}/> Shopping
-                         </div>
-                      </div>
-                   </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                   {settings.localSpots.map(spot => (
-                     <div key={spot.id} className="bg-neutral-50 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all border border-neutral-100 group">
-                        <div className="h-64 overflow-hidden relative">
-                           <img src={spot.image} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" alt={spot.title} />
-                           <div className="absolute top-6 left-6">
-                              <span className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-sm">
-                                 {spot.category}
-                              </span>
-                           </div>
-                        </div>
-                        <div className="p-8">
-                           <h3 className="text-2xl font-bold serif mb-3">{spot.title}</h3>
-                           <p className="text-neutral-500 text-sm leading-relaxed">{spot.description}</p>
-                        </div>
-                     </div>
-                   ))}
-                </div>
-             </div>
           </section>
         </main>
       )}
@@ -428,16 +310,6 @@ const App: React.FC = () => {
                   <p className="text-neutral-500 max-w-2xl text-lg">Browse our currently available residences and upcoming projects on Cedar Creek Lake.</p>
                </div>
                <div className="flex flex-wrap gap-4">
-                  <div className="relative">
-                    <select 
-                      className="appearance-none bg-white border border-neutral-200 px-8 py-3 rounded-full font-bold text-sm outline-none cursor-pointer pr-12"
-                      value={filterNeighborhood}
-                      onChange={e => setFilterNeighborhood(e.target.value)}
-                    >
-                      {neighborhoodsList.map(n => <option key={n} value={n}>{n}</option>)}
-                    </select>
-                    <ChevronLeft className="-rotate-90 absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" size={16} />
-                  </div>
                   <div className="relative">
                     <select 
                       className="appearance-none bg-white border border-neutral-200 px-8 py-3 rounded-full font-bold text-sm outline-none cursor-pointer pr-12"
@@ -464,9 +336,58 @@ const App: React.FC = () => {
                 <div className="col-span-full py-40 text-center">
                    <Search size={48} className="mx-auto text-neutral-200 mb-6" />
                    <h3 className="text-2xl font-bold serif italic">No properties found</h3>
-                   <p className="text-neutral-400 mt-2">Try adjusting your filters.</p>
                 </div>
               )}
+            </div>
+          </div>
+        </main>
+      )}
+
+      {view === 'contact' && (
+        <main className="flex-1 pt-40 pb-32 bg-neutral-50">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+               <div>
+                  <h1 className="text-6xl font-medium serif italic mb-8">Let's Build Your Legacy.</h1>
+                  <p className="text-neutral-500 text-xl leading-relaxed mb-12 max-w-lg">
+                    Every masterpiece starts with a conversation. We invite you to share your vision with us, and together we will create something truly extraordinary on the shores of Cedar Creek Lake.
+                  </p>
+                  
+                  <div className="space-y-8">
+                    <div className="flex items-center gap-6">
+                      <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-luxury-gold shadow-sm border border-neutral-100">
+                         <Phone size={24} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400">Direct Line</p>
+                        <p className="text-xl font-bold text-lake">{settings.phone}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-6">
+                      <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-luxury-gold shadow-sm border border-neutral-100">
+                         <Mail size={24} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400">Inquiries</p>
+                        <p className="text-xl font-bold text-lake">{settings.email}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-6">
+                      <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-luxury-gold shadow-sm border border-neutral-100">
+                         <MapPin size={24} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400">Main Office</p>
+                        <p className="text-xl font-bold text-lake">{settings.address}</p>
+                      </div>
+                    </div>
+                  </div>
+               </div>
+
+               <ContactForm 
+                webhookUrl={settings.webhookUrl} 
+                companyName={settings.companyName}
+               />
             </div>
           </div>
         </main>
@@ -510,6 +431,10 @@ const App: React.FC = () => {
         <PropertyDetailsModal 
           property={selectedProperty} 
           onClose={() => setSelectedProperty(null)} 
+          onInquire={() => {
+            setSelectedProperty(null);
+            setView('contact');
+          }}
         />
       )}
 
@@ -528,6 +453,7 @@ const App: React.FC = () => {
                <button onClick={() => setView('about')} className="hover:text-lake transition-colors text-xs font-bold uppercase tracking-widest">About</button>
                <button onClick={() => setView('listings')} className="hover:text-lake transition-colors text-xs font-bold uppercase tracking-widest">Collection</button>
                <button onClick={() => setView('lifestyle')} className="hover:text-lake transition-colors text-xs font-bold uppercase tracking-widest">Lifestyle</button>
+               <button onClick={() => setView('contact')} className="hover:text-lake transition-colors text-xs font-bold uppercase tracking-widest">Contact</button>
             </div>
             <div className="text-center md:text-right">
                <p className="text-neutral-400 text-[10px] uppercase font-bold tracking-widest mb-2">Contact</p>

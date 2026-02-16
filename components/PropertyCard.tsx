@@ -1,6 +1,6 @@
 import React from 'react';
 import { Property } from '../types';
-import { Bed, Bath, Move, MapPin } from 'lucide-react';
+import { Bed, Bath, Move } from 'lucide-react';
 
 interface PropertyCardProps {
   property: Property;
@@ -34,25 +34,21 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, onViewDeta
       </div>
       
       <div className="p-6">
-        <div className="flex items-center text-neutral-500 text-sm mb-2">
-          <MapPin size={14} className="mr-1" />
-          {property.neighborhood}
-        </div>
         <h3 className="text-2xl font-semibold mb-3">{property.title}</h3>
         <p className="text-luxury-gold text-2xl font-bold mb-4">{formatter.format(property.price)}</p>
         
         <div className="flex justify-between items-center py-4 border-t border-neutral-100 mb-4">
           <div className="flex items-center gap-1.5 text-neutral-600">
             <Bed size={18} />
-            <span className="text-sm font-medium">{property.beds}</span>
+            <span className="text-sm font-medium">{property.beds} Beds</span>
           </div>
           <div className="flex items-center gap-1.5 text-neutral-600">
             <Bath size={18} />
-            <span className="text-sm font-medium">{property.baths}</span>
+            <span className="text-sm font-medium">{property.baths} Baths</span>
           </div>
           <div className="flex items-center gap-1.5 text-neutral-600">
             <Move size={18} />
-            <span className="text-sm font-medium">{property.sqft.toLocaleString()}</span>
+            <span className="text-sm font-medium">{property.sqft.toLocaleString()} SqFt</span>
           </div>
         </div>
         

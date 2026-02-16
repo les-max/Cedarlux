@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Property } from '../types';
-import { X, Bed, Bath, Move, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, Bed, Bath, Move, ChevronLeft, ChevronRight, MessageSquare } from 'lucide-react';
 
 interface PropertyDetailsModalProps {
   property: Property;
   onClose: () => void;
+  onInquire?: () => void;
 }
 
-export const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ property, onClose }) => {
+export const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ property, onClose, onInquire }) => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const images = property.gallery && property.gallery.length > 0 ? property.gallery : [property.image];
 
@@ -40,8 +41,11 @@ export const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ prop
             )}
         </div>
         <div className="flex-1 overflow-y-auto p-8 md:p-12">
-          <h2 className="text-4xl font-bold serif mb-4">{property.title}</h2>
+          <div className="flex justify-between items-start mb-4">
+            <h2 className="text-4xl font-bold serif">{property.title}</h2>
+          </div>
           <p className="text-3xl font-bold text-luxury-gold mb-8">{formatter.format(property.price)}</p>
+          
           <div className="grid grid-cols-3 gap-6 py-8 border-y border-neutral-100 mb-8">
             <div className="text-center">
               <Bed size={24} className="mx-auto mb-2 text-neutral-400"/> 
@@ -59,7 +63,20 @@ export const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ prop
               <p className="text-[10px] uppercase tracking-widest text-neutral-400">SqFt</p>
             </div>
           </div>
-          <p className="text-neutral-500 leading-relaxed text-lg font-light">{property.description}</p>
+          
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-2">Description</h4>
+              <p className="text-neutral-500 leading-relaxed text-lg font-light">{property.description}</p>
+            </div>
+            
+            <button 
+              onClick={onInquire}
+              className="w-full py-5 bg-lake text-white rounded-2xl font-black uppercase tracking-[0.2em] text-xs shadow-lg hover:bg-neutral-800 transition-all flex items-center justify-center gap-3 mt-8"
+            >
+              Inquire About This Property <MessageSquare size={16} />
+            </button>
+          </div>
         </div>
       </div>
     </div>

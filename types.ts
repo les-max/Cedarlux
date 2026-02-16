@@ -61,6 +61,7 @@ export interface SiteSettings {
   address: string;
   // Integrations
   externalScripts: string;
+  webhookUrl: string;
 }
 
 export interface ChatMessage {

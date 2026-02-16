@@ -82,10 +82,11 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     "Star Harbor",
     "Beacon Hill"
   ],
-  "phone": "214-555-0199",
+  "phone": "972-764-8687",
   "email": "info@cedarluxproperties.com",
   "address": "Mabank, TX 75147",
-  "externalScripts": ""
+  "externalScripts": "",
+  "webhookUrl": ""
 };
 
 export const INITIAL_PROPERTIES: Property[] = [

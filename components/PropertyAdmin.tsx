@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Property, PropertyStatus, SiteSettings } from '../types';
-import { Layout, Settings, Edit2, Trash2, X, Sun, LogOut, Plus, Save, Code, Copy, CheckCircle } from 'lucide-react';
+import { Layout, Settings, Edit2, Trash2, X, Sun, LogOut, Plus, Save, Code, Copy, CheckCircle, Zap } from 'lucide-react';
 
 interface PropertyAdminProps {
   properties: Property[];
@@ -291,15 +291,34 @@ export const INITIAL_PROPERTIES: Property[] = ${propertiesStr};`;
                     <label className="text-xs font-bold uppercase text-neutral-400">Home Hero Image</label>
                     <input className="w-full p-3 border rounded-xl" value={tempSettings.heroImage} onChange={e => setTempSettings({...tempSettings, heroImage: e.target.value})} />
                  </div>
-                 <div className="col-span-1 md:col-span-2 space-y-2">
-                    <label className="text-xs font-bold uppercase text-neutral-400">Header Scripts (Analytics, Pixel, etc.)</label>
-                    <textarea 
-                        className="w-full p-3 border rounded-xl h-40 font-mono text-xs text-neutral-600" 
-                        value={tempSettings.externalScripts} 
-                        onChange={e => setTempSettings({...tempSettings, externalScripts: e.target.value})}
-                        placeholder="<!-- Paste your Google Analytics or Facebook Pixel code here -->"
-                    />
-                    <p className="text-[10px] text-neutral-400">Warning: Valid HTML/JS only. These scripts will be injected into the &lt;head&gt; of your site.</p>
+                 <div className="col-span-1 md:col-span-2 space-y-4">
+                    <div className="bg-neutral-50 p-6 rounded-2xl border border-neutral-200">
+                        <div className="flex items-center gap-2 mb-4 text-lake font-bold">
+                            <Zap size={20} className="text-luxury-gold"/> 
+                            <span className="uppercase tracking-widest text-xs">Integrations</span>
+                        </div>
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase text-neutral-400">Lead Webhook URL (Zapier, Make.com, etc.)</label>
+                                <input 
+                                    className="w-full p-3 border rounded-xl font-mono text-sm" 
+                                    value={tempSettings.webhookUrl} 
+                                    onChange={e => setTempSettings({...tempSettings, webhookUrl: e.target.value})}
+                                    placeholder="https://hooks.zapier.com/v1/event/..."
+                                />
+                                <p className="text-[10px] text-neutral-400">Form inquiries will be sent as a POST request to this URL with JSON data.</p>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase text-neutral-400">Header Scripts (Analytics, Pixel, etc.)</label>
+                                <textarea 
+                                    className="w-full p-3 border rounded-xl h-32 font-mono text-xs text-neutral-600" 
+                                    value={tempSettings.externalScripts} 
+                                    onChange={e => setTempSettings({...tempSettings, externalScripts: e.target.value})}
+                                    placeholder="<!-- Paste your Google Analytics or Facebook Pixel code here -->"
+                                />
+                            </div>
+                        </div>
+                    </div>
                  </div>
                  
                  {/* Persistence / Export Section */}
