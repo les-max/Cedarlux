@@ -36,7 +36,7 @@ export const PropertyAdmin: React.FC<PropertyAdminProps> = ({
     image: '',
     gallery: [],
     status: 'Available',
-    neighborhood: settings.neighborhoods[0] || '',
+    neighborhood: settings.neighborhoods[0] || 'Cedar Creek Lake',
     features: []
   });
 
@@ -151,18 +151,20 @@ export const INITIAL_PROPERTIES: Property[] = ${propertiesStr};`;
                           <input className="w-full p-3 border rounded-xl" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} required />
                        </div>
                        <div className="space-y-2">
-                          <label className="text-xs font-bold uppercase text-neutral-400">Neighborhood</label>
-                          <select className="w-full p-3 border rounded-xl" value={formData.neighborhood} onChange={e => setFormData({...formData, neighborhood: e.target.value})}>
-                             {settings.neighborhoods.map(n => <option key={n} value={n}>{n}</option>)}
-                          </select>
-                       </div>
-                       <div className="space-y-2">
                           <label className="text-xs font-bold uppercase text-neutral-400">Status</label>
                           <select className="w-full p-3 border rounded-xl" value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as PropertyStatus})}>
                              <option value="Available">Available</option>
                              <option value="Under Construction">Under Construction</option>
                              <option value="Sold">Sold</option>
                           </select>
+                       </div>
+                       <div className="space-y-2">
+                          <label className="text-xs font-bold uppercase text-neutral-400">Bedrooms</label>
+                          <input type="number" step="1" className="w-full p-3 border rounded-xl" value={formData.beds} onChange={e => setFormData({...formData, beds: Number(e.target.value)})} />
+                       </div>
+                       <div className="space-y-2">
+                          <label className="text-xs font-bold uppercase text-neutral-400">Bathrooms</label>
+                          <input type="number" step="0.5" className="w-full p-3 border rounded-xl" value={formData.baths} onChange={e => setFormData({...formData, baths: Number(e.target.value)})} />
                        </div>
                        <div className="space-y-2">
                           <label className="text-xs font-bold uppercase text-neutral-400">SqFt</label>
@@ -186,7 +188,7 @@ export const INITIAL_PROPERTIES: Property[] = ${propertiesStr};`;
                             <img src={p.image} className="w-20 h-16 object-cover rounded-xl" alt="" />
                             <div>
                                <h4 className="font-bold text-lake">{p.title}</h4>
-                               <p className="text-xs text-neutral-400 font-bold uppercase tracking-wider">{p.neighborhood} • {p.status}</p>
+                               <p className="text-xs text-neutral-400 font-bold uppercase tracking-wider">{p.beds} Beds • {p.baths} Baths • {p.status}</p>
                             </div>
                          </div>
                          <div className="flex gap-2">
