@@ -91,7 +91,11 @@ const App: React.FC = () => {
       <nav className="fixed w-full z-50 glass shadow-sm">
         <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
           <div className="flex items-center gap-4 cursor-pointer" onClick={() => setView('home')}>
-            <h2 className="text-2xl font-bold serif tracking-tight">CEDAR <span className="text-luxury-gold italic">LUX</span></h2>
+             <img 
+               src={settings.logoImage} 
+               alt={settings.companyName} 
+               className="h-12 w-auto object-contain"
+             />
           </div>
 
           <div className="hidden md:flex items-center gap-10">
@@ -208,16 +212,47 @@ const App: React.FC = () => {
             </div>
           </section>
           
+          {/* Dallas Proximity Section */}
+          <section className="py-32 bg-white overflow-hidden">
+            <div className="max-w-7xl mx-auto px-6">
+              <div className="flex flex-col md:flex-row items-center gap-16">
+                <div className="flex-1">
+                  <h2 className="text-4xl md:text-5xl font-bold serif italic mb-6">The Best of Both Worlds</h2>
+                  <p className="text-neutral-500 text-lg leading-relaxed mb-8">
+                    Located just 60 minutes from the Dallas metroplex, Cedar Creek Lake is the premier sanctuary for the city's most discerning families. Whether it's a weekend retreat or a permanent legacy estate, you're never far from the city's pulse, yet worlds away from its pace.
+                  </p>
+                  <div className="flex gap-12">
+                    <div>
+                      <p className="text-luxury-gold text-3xl font-bold serif">60m</p>
+                      <p className="text-xs uppercase font-black tracking-widest text-neutral-400">From Dallas</p>
+                    </div>
+                    <div>
+                      <p className="text-luxury-gold text-3xl font-bold serif">32k</p>
+                      <p className="text-xs uppercase font-black tracking-widest text-neutral-400">Acres of Water</p>
+                    </div>
+                    <div>
+                      <p className="text-luxury-gold text-3xl font-bold serif">24/7</p>
+                      <p className="text-xs uppercase font-black tracking-widest text-neutral-400">Gated Security</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-1 w-full h-[400px] bg-neutral-100 rounded-[3rem] overflow-hidden border border-neutral-100">
+                   <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&q=80&w=2070" className="w-full h-full object-cover opacity-80" alt="Dallas Lake Life" />
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Activities Section */}
-          <section className="py-32 bg-white">
+          <section className="py-32 bg-neutral-50">
              <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center mb-20">
                    <h2 className="text-4xl md:text-5xl font-bold serif italic mb-6 text-lake">Lakeside Luxury, Defined.</h2>
-                   <p className="text-neutral-500 max-w-2xl mx-auto">Cedar Creek Lake offers a lifestyle unmatched in Texas, blending absolute privacy with exhilarating recreation.</p>
+                   <p className="text-neutral-500 max-w-2xl mx-auto">Cedar Creek Lake offers a lifestyle unmatched in Texas, blending absolute privacy with exhilarating recreation for every generation.</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                    {settings.activities.map(act => (
-                     <div key={act.id} className="p-8 bg-neutral-50 rounded-3xl text-center hover:shadow-lg transition-all border border-neutral-100 group">
+                     <div key={act.id} className="p-8 bg-white rounded-[2.5rem] text-center hover:shadow-xl transition-all border border-neutral-100 group">
                         <div className="w-20 h-20 bg-luxury-gold/10 group-hover:bg-luxury-gold rounded-full flex items-center justify-center mx-auto mb-6 text-luxury-gold group-hover:text-white transition-all shadow-sm">
                            {act.icon === 'Waves' ? <Waves size={32} /> : act.icon === 'Flag' ? <Flag size={32} /> : <Anchor size={32} />}
                         </div>
@@ -225,7 +260,7 @@ const App: React.FC = () => {
                         <p className="text-neutral-500 mb-8 leading-relaxed">{act.description}</p>
                         <div className="flex flex-wrap gap-2 justify-center mt-auto">
                            {act.highlights.map((h, idx) => (
-                             <span key={idx} className="px-3 py-1 bg-white rounded-full text-[10px] font-black uppercase tracking-wider text-luxury-gold border border-neutral-200">{h}</span>
+                             <span key={idx} className="px-3 py-1 bg-neutral-50 rounded-full text-[10px] font-black uppercase tracking-wider text-luxury-gold border border-neutral-200">{h}</span>
                            ))}
                         </div>
                      </div>
@@ -235,12 +270,12 @@ const App: React.FC = () => {
           </section>
 
           {/* Local Spots Curated Grid */}
-          <section className="py-32 bg-neutral-50">
+          <section className="py-32 bg-white">
              <div className="max-w-7xl mx-auto px-6">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                    <div className="max-w-2xl">
                       <h2 className="text-4xl font-bold serif italic mb-4">Lakeside Curations</h2>
-                      <p className="text-neutral-500">From fine dining at the Pinnacle Club to boutique shopping in Mabank, we've curated the best of the lake region.</p>
+                      <p className="text-neutral-500">From fine dining at the Pinnacle Club to boutique shopping in Mabank, we've curated the absolute best of the Cedar Creek Lake region.</p>
                    </div>
                    <div className="hidden md:block">
                       <div className="flex gap-4">
@@ -256,7 +291,7 @@ const App: React.FC = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                    {settings.localSpots.map(spot => (
-                     <div key={spot.id} className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all border border-neutral-100 group">
+                     <div key={spot.id} className="bg-neutral-50 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all border border-neutral-100 group">
                         <div className="h-64 overflow-hidden relative">
                            <img src={spot.image} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" alt={spot.title} />
                            <div className="absolute top-6 left-6">
@@ -374,7 +409,11 @@ const App: React.FC = () => {
       <footer className="bg-white border-t border-neutral-100 py-16">
          <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="text-center md:text-left">
-               <h3 className="text-xl font-bold serif mb-2">CEDAR <span className="text-luxury-gold italic">LUX</span></h3>
+               <img 
+                 src={settings.logoImage} 
+                 alt={settings.companyName} 
+                 className="h-16 w-auto mb-4 mx-auto md:mx-0 object-contain"
+               />
                <p className="text-neutral-400 text-xs font-medium max-w-xs uppercase tracking-wider">Unrivaled lakefront masterpieces for the discerning Texan.</p>
             </div>
             <div className="flex gap-8 text-neutral-400">
