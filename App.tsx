@@ -264,7 +264,7 @@ const App: React.FC = () => {
                         </p>
                     </div>
                     <div className="h-64 rounded-2xl overflow-hidden shadow-xl">
-                        <img src="https://images.unsplash.com/photo-1510627489930-0c1b0dc58e85?auto=format&fit=crop&q=80&w=1000" className="w-full h-full object-cover" alt="Lake Lifestyle" />
+                        <img src="https://photos.zillowstatic.com/fp/478eb995b712eb79af80c59ea8f527ba-cc_ft_768.webp" className="w-full h-full object-cover" alt="Lake Lifestyle" />
                     </div>
                 </div>
                 
