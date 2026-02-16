@@ -3,7 +3,6 @@ import { Property, SiteSettings } from './types';
 import { INITIAL_PROPERTIES, DEFAULT_SETTINGS } from './constants';
 import { PropertyCard } from './components/PropertyCard';
 import { PropertyAdmin } from './components/PropertyAdmin';
-import { AIConsultant } from './components/AIConsultant';
 import { PropertyDetailsModal } from './components/PropertyDetailsModal';
 import { 
   Menu, X, LayoutDashboard, 
@@ -94,7 +93,7 @@ const App: React.FC = () => {
              <img 
                src={settings.logoImage} 
                alt={settings.companyName} 
-               className="h-12 w-auto object-contain"
+               className="h-20 w-auto object-contain"
              />
           </div>
 
@@ -428,7 +427,6 @@ const App: React.FC = () => {
          </div>
       </footer>
       
-      <AIConsultant />
     </div>
   );
 };
