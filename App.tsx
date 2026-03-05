@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Property, SiteSettings } from './types';
 import { INITIAL_PROPERTIES, DEFAULT_SETTINGS } from './constants';
+import { supabase, adminSupabase } from './services/supabaseClient';
 import { PropertyCard } from './components/PropertyCard';
 import { PropertyAdmin } from './components/PropertyAdmin';
 import { PropertyDetailsModal } from './components/PropertyDetailsModal';
@@ -13,23 +14,9 @@ import {
 } from 'lucide-react';
 
 const App: React.FC = () => {
-  const [properties, setProperties] = useState<Property[]>(() => {
-    const saved = localStorage.getItem('creekside_properties_v2');
-    return saved ? JSON.parse(saved) : INITIAL_PROPERTIES;
-  });
-
-  const [settings, setSettings] = useState<SiteSettings>(() => {
-    const saved = localStorage.getItem('creekside_settings_v2');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        return { ...DEFAULT_SETTINGS, ...parsed };
-      } catch (e) {
-        return DEFAULT_SETTINGS;
-      }
-    }
-    return DEFAULT_SETTINGS;
-  });
+  const [properties, setProperties] = useState<Property[]>(INITIAL_PROPERTIES);
+  const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [view, setView] = useState<'home' | 'admin' | 'listings' | 'lifestyle' | 'about' | 'contact'>('home');
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
@@ -40,13 +27,19 @@ const App: React.FC = () => {
 
   const [filterStatus, setFilterStatus] = useState<string>('All');
 
+  // Load data from Supabase on mount
   useEffect(() => {
-    localStorage.setItem('creekside_properties_v2', JSON.stringify(properties));
-  }, [properties]);
-
-  useEffect(() => {
-    localStorage.setItem('creekside_settings_v2', JSON.stringify(settings));
-  }, [settings]);
+    const loadData = async () => {
+      const [{ data: propsData }, { data: settingsData }] = await Promise.all([
+        supabase.from('properties').select('*').order('created_at', { ascending: false }),
+        supabase.from('settings').select('data').eq('id', 1).single()
+      ]);
+      if (propsData && propsData.length > 0) setProperties(propsData as Property[]);
+      if (settingsData?.data) setSettings({ ...DEFAULT_SETTINGS, ...settingsData.data });
+      setIsLoading(false);
+    };
+    loadData();
+  }, []);
 
   // Scroll to top on view change
   useEffect(() => {
@@ -76,16 +69,25 @@ const App: React.FC = () => {
     }
   }, [settings.externalScripts]);
 
-  const addProperty = (newProperty: Property) => {
-    setProperties(prev => [newProperty, ...prev]);
+  const addProperty = async (newProperty: Property) => {
+    const { error } = await adminSupabase.from('properties').insert(newProperty);
+    if (!error) setProperties((prev: Property[]) => [newProperty, ...prev]);
   };
 
-  const updateProperty = (updated: Property) => {
-    setProperties(prev => prev.map(p => p.id === updated.id ? updated : p));
+  const updateProperty = async (updated: Property) => {
+    const { created_at, ...data } = updated;
+    const { error } = await adminSupabase.from('properties').update(data).eq('id', updated.id);
+    if (!error) setProperties((prev: Property[]) => prev.map((p: Property) => p.id === updated.id ? updated : p));
   };
 
-  const deleteProperty = (id: string) => {
-    setProperties(prev => prev.filter(p => p.id !== id));
+  const deleteProperty = async (id: string) => {
+    const { error } = await adminSupabase.from('properties').delete().eq('id', id);
+    if (!error) setProperties((prev: Property[]) => prev.filter((p: Property) => p.id !== id));
+  };
+
+  const updateSettings = async (newSettings: SiteSettings) => {
+    const { error } = await adminSupabase.from('settings').upsert({ id: 1, data: newSettings });
+    if (!error) setSettings(newSettings);
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -105,6 +107,14 @@ const App: React.FC = () => {
   });
 
   const statusesList = ['All', 'Available', 'Under Construction', 'Sold'];
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <p className="text-luxury-gold font-serif italic text-xl tracking-wide">Preparing your luxury experience...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
@@ -414,13 +424,13 @@ const App: React.FC = () => {
               </form>
             </div>
           ) : (
-            <PropertyAdmin 
-              properties={properties} 
-              onAdd={addProperty} 
+            <PropertyAdmin
+              properties={properties}
+              onAdd={addProperty}
               onUpdate={updateProperty}
-              onDelete={deleteProperty} 
+              onDelete={deleteProperty}
               settings={settings}
-              onUpdateSettings={setSettings}
+              onUpdateSettings={updateSettings}
               onLogout={() => { setIsAuthenticated(false); setPasswordInput(''); }}
             />
           )}

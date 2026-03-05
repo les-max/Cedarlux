@@ -14,6 +14,7 @@ export interface Property {
   status: PropertyStatus;
   neighborhood: string;
   features: string[];
+  created_at?: string;
 }
 
 export interface Activity {
