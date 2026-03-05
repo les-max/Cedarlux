@@ -562,6 +562,7 @@ const App: React.FC = () => {
                 companyName={settings.companyName}
                 highlevelToken={settings.highlevelToken}
                 highlevelLocationId={settings.highlevelLocationId}
+                highlevelMessageFieldKey={settings.highlevelMessageFieldKey}
                />
             </div>
           </div>

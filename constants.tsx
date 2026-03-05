@@ -137,7 +137,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   "externalScripts": "",
   "webhookUrl": "",
   "highlevelToken": "",
-  "highlevelLocationId": ""
+  "highlevelLocationId": "",
+  "highlevelMessageFieldKey": ""
 };
 
 export const INITIAL_PROPERTIES: Property[] = [

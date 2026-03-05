@@ -7,9 +7,10 @@ interface ContactFormProps {
   prefillMessage?: string;
   highlevelToken?: string;
   highlevelLocationId?: string;
+  highlevelMessageFieldKey?: string;
 }
 
-export const ContactForm: React.FC<ContactFormProps> = ({ webhookUrl, companyName, prefillMessage, highlevelToken, highlevelLocationId }) => {
+export const ContactForm: React.FC<ContactFormProps> = ({ webhookUrl, companyName, prefillMessage, highlevelToken, highlevelLocationId, highlevelMessageFieldKey }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -36,6 +37,11 @@ export const ContactForm: React.FC<ContactFormProps> = ({ webhookUrl, companyNam
         const firstName = nameParts[0] || '';
         const lastName = nameParts.slice(1).join(' ') || '';
 
+        // Build customFields array if a message field key is configured
+        const customFields = formData.message && highlevelMessageFieldKey
+          ? [{ key: highlevelMessageFieldKey, field_value: formData.message }]
+          : [];
+
         // Create contact in HighLevel
         const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
           method: 'POST',
@@ -52,26 +58,11 @@ export const ContactForm: React.FC<ContactFormProps> = ({ webhookUrl, companyNam
             email: formData.email,
             phone: formData.phone,
             source: companyName,
+            ...(customFields.length > 0 && { customFields }),
           }),
         });
 
         if (!contactRes.ok) throw new Error('HighLevel contact creation failed');
-
-        // If a message was included, add it as a note on the contact
-        if (formData.message) {
-          const { contact } = await contactRes.json();
-          if (contact?.id) {
-            await fetch(`https://services.leadconnectorhq.com/contacts/${contact.id}/notes`, {
-              method: 'POST',
-              headers: {
-                'Authorization': `Bearer ${highlevelToken}`,
-                'Content-Type': 'application/json',
-                'Version': '2021-07-28',
-              },
-              body: JSON.stringify({ body: formData.message, userId: contact.id }),
-            });
-          }
-        }
       } else {
         const response = await fetch(webhookUrl, {
           method: 'POST',

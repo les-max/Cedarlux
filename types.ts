@@ -70,6 +70,7 @@ export interface SiteSettings {
   webhookUrl: string;
   highlevelToken: string;
   highlevelLocationId: string;
+  highlevelMessageFieldKey: string;
 }
 
 export interface ChatMessage {
