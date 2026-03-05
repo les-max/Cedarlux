@@ -195,7 +195,7 @@ const App: React.FC = () => {
             <div className="max-w-7xl mx-auto px-6">
               <div className="flex justify-between items-end mb-16">
                 <div>
-                  <h2 className="text-5xl md:text-6xl font-bold italic serif">Featured Estates</h2>
+                  <h2 className="text-5xl md:text-6xl font-bold italic serif">Featured Homes</h2>
                   <p className="text-neutral-500 mt-4 max-w-xl">A selection of our most prestigious properties currently overlooking Cedar Creek Lake.</p>
                 </div>
                 <button onClick={() => setView('listings')} className="text-luxury-gold font-bold flex items-center gap-2 hover:gap-4 transition-all pb-2 border-b-2 border-luxury-gold">
