@@ -62,6 +62,8 @@ export interface SiteSettings {
   phone: string;
   email: string;
   address: string;
+  // Social / SEO
+  socialImage: string;
   // Integrations
   externalScripts: string;
   webhookUrl: string;

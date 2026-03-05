@@ -387,6 +387,19 @@ export const PropertyAdmin: React.FC<PropertyAdminProps> = ({
                     <label className="text-xs font-bold uppercase text-neutral-400">Home Hero Image</label>
                     <input className="w-full p-3 border rounded-xl" value={tempSettings.heroImage} onChange={e => setTempSettings({...tempSettings, heroImage: e.target.value})} />
                  </div>
+                 <div className="col-span-1 md:col-span-2 space-y-2">
+                    <label className="text-xs font-bold uppercase text-neutral-400">Social Media Photo</label>
+                    <input
+                       className="w-full p-3 border rounded-xl"
+                       placeholder="https://..."
+                       value={tempSettings.socialImage || ''}
+                       onChange={e => setTempSettings({...tempSettings, socialImage: e.target.value})}
+                    />
+                    <p className="text-[10px] text-neutral-400">This image appears when someone shares the website on Facebook, Instagram, or text message. Use a high-quality horizontal photo (1200×630px ideal).</p>
+                    {tempSettings.socialImage && (
+                      <img src={tempSettings.socialImage} className="mt-2 rounded-xl w-full max-w-sm h-36 object-cover border border-neutral-200" alt="Social preview" />
+                    )}
+                 </div>
                  <div className="col-span-1 md:col-span-2 space-y-4">
                     <div className="bg-neutral-50 p-6 rounded-2xl border border-neutral-200">
                         <div className="flex items-center gap-2 mb-4 text-lake font-bold">

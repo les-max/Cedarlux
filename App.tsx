@@ -52,6 +52,25 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [view]);
 
+  // Update social/OG meta tags when settings change
+  useEffect(() => {
+    const setMeta = (property: string, content: string) => {
+      let el = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement | null;
+      if (!el) { el = document.createElement('meta'); el.setAttribute('property', property); document.head.appendChild(el); }
+      el.content = content;
+    };
+    const setNameMeta = (name: string, content: string) => {
+      let el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
+      if (!el) { el = document.createElement('meta'); el.setAttribute('name', name); document.head.appendChild(el); }
+      el.content = content;
+    };
+    if (settings.socialImage) {
+      setMeta('og:image', settings.socialImage);
+      setNameMeta('twitter:image', settings.socialImage);
+    }
+    setMeta('og:title', `${settings.companyName} | Cedar Creek Lake Custom Homes`);
+  }, [settings.socialImage, settings.companyName]);
+
   // Inject External Scripts (Analytics, etc.)
   useEffect(() => {
     const existing = document.querySelectorAll('[data-injected-script="true"]');
