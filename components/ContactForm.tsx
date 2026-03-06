@@ -32,54 +32,15 @@ export const ContactForm: React.FC<ContactFormProps> = ({ webhookUrl, companyNam
     setStatus('submitting');
     try {
       if (useHighLevel) {
-        // Split name into first/last for HighLevel contact fields
-        const nameParts = formData.name.trim().split(/\s+/);
-        const firstName = nameParts[0] || '';
-        const lastName = nameParts.slice(1).join(' ') || '';
-
-        // Resolve the field key to a UUID by looking up the location's custom fields
-        let customFields: { id: string; field_value: string }[] = [];
-        if (formData.message && highlevelMessageFieldKey) {
-          try {
-            const fieldsRes = await fetch(`https://services.leadconnectorhq.com/locations/${highlevelLocationId}/customFields`, {
-              headers: {
-                'Authorization': `Bearer ${highlevelToken}`,
-                'Version': '2021-07-28',
-              },
-            });
-            if (fieldsRes.ok) {
-              const fieldsData = await fieldsRes.json();
-              const fields = fieldsData.customFields || fieldsData.data || [];
-              const match = fields.find((f: { id: string; fieldKey?: string; key?: string }) =>
-                f.fieldKey === highlevelMessageFieldKey || f.key === highlevelMessageFieldKey
-              );
-              if (match?.id) {
-                customFields = [{ id: match.id, field_value: formData.message }];
-              }
-            }
-          } catch {
-            // If lookup fails, proceed without the custom field
-          }
-        }
-
-        // Create contact in HighLevel
-        const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
+        const contactRes = await fetch('/api/submit-contact', {
           method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${highlevelToken}`,
-            'Content-Type': 'application/json',
-            'Version': '2021-07-28',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            locationId: highlevelLocationId,
-            firstName,
-            lastName,
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            source: companyName,
-            tags: ['web_inquiry'],
-            ...(customFields.length > 0 && { customFields }),
+            ...formData,
+            companyName,
+            highlevelToken,
+            highlevelLocationId,
+            highlevelMessageFieldKey,
           }),
         });
 
